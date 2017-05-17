@@ -15,6 +15,7 @@
 		EFED14271EB8AA7500ECF63B /* GYMDIARYTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED14261EB8AA7500ECF63B /* GYMDIARYTests.swift */; };
 		EFED14321EB8AA7500ECF63B /* GYMDIARYUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED14311EB8AA7500ECF63B /* GYMDIARYUITests.swift */; };
 		EFED14401EB8AF3600ECF63B /* GYMDIARY_icon in Resources */ = {isa = PBXBuildFile; fileRef = EFED143F1EB8AF3600ECF63B /* GYMDIARY_icon */; };
+		EFF384F01ECC4CAC0083DA30 /* launchscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = EFF384EF1ECC4CAC0083DA30 /* launchscreen.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		EFED14311EB8AA7500ECF63B /* GYMDIARYUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GYMDIARYUITests.swift; sourceTree = "<group>"; };
 		EFED14331EB8AA7500ECF63B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFED143F1EB8AF3600ECF63B /* GYMDIARY_icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GYMDIARY_icon; sourceTree = "<group>"; };
+		EFF384EF1ECC4CAC0083DA30 /* launchscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchscreen.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		EFED14051EB8AA7500ECF63B = {
 			isa = PBXGroup;
 			children = (
+				EFF384EF1ECC4CAC0083DA30 /* launchscreen.png */,
 				EFED14101EB8AA7500ECF63B /* GYMDIARY */,
 				EFED14251EB8AA7500ECF63B /* GYMDIARYTests */,
 				EFED14301EB8AA7500ECF63B /* GYMDIARYUITests */,
@@ -238,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFF384F01ECC4CAC0083DA30 /* launchscreen.png in Resources */,
 				EFED141C1EB8AA7500ECF63B /* LaunchScreen.storyboard in Resources */,
 				EFED14191EB8AA7500ECF63B /* Assets.xcassets in Resources */,
 				EFED14171EB8AA7500ECF63B /* Main.storyboard in Resources */,
@@ -423,10 +427,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = A5UXJR76G3;
 				INFOPLIST_FILE = GYMDIARY/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArizaKuo.GYMDIARY;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -436,10 +442,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = A5UXJR76G3;
 				INFOPLIST_FILE = GYMDIARY/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArizaKuo.GYMDIARY;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -520,6 +528,7 @@
 				EFED14381EB8AA7500ECF63B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EFED14391EB8AA7500ECF63B /* Build configuration list for PBXNativeTarget "GYMDIARYTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +537,7 @@
 				EFED143B1EB8AA7500ECF63B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EFED143C1EB8AA7500ECF63B /* Build configuration list for PBXNativeTarget "GYMDIARYUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +546,7 @@
 				EFED143E1EB8AA7500ECF63B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

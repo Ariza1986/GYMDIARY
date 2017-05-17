@@ -17,10 +17,11 @@ class ViewController: UIViewController{
         //let myUserDefaults = UserDefaults.standard
         
         //catch date YYYYMMdd
-        let now = Date()
+        let today = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYYMMdd"
-        print(formatter.string(from: now))
+        print(today)
+        print(formatter.string(from: today))
         
         DispatchQueue.main.async {
         //print("This is run on the main queue, after the previous code in outer block")
@@ -38,17 +39,6 @@ class ViewController: UIViewController{
         let alertController = UIAlertController(title: "Waring!!",
                                                 message: "What's your Weight today?",
                                                 preferredStyle: UIAlertControllerStyle.alert)
-        /*
-        alertController.addTextField { (textField1) in
-            textField1.text = "Weight Today"
-            textField1.keyboardType = UIKeyboardType.numbersAndPunctuation
-        }
-        
-        alertController.addTextField { (textField2) in
-            textField2.text = "Body Fat % Today"
-            textField2.keyboardType = UIKeyboardType.numbersAndPunctuation
-        }
-        */
         alertController.addAction(UIAlertAction(title: "OK",
                                                 style:UIAlertActionStyle.default,
                                                 handler: nil))
