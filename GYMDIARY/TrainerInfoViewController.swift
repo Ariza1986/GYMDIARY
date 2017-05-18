@@ -45,9 +45,7 @@ class TrainerInfoViewController: UIViewController{
     }
     
     @IBAction func pressOkButton() {
-        //self.dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
-        
         dismiss(animated: true, completion: nil)
     }
     

@@ -30,8 +30,7 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="catchNewTrainerInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="C6H-1p-8N8"/>
-                                    <segue destination="XLx-Oo-6gp" kind="show" id="LPk-FU-moZ"/>
+                                    <action selector="catchNewTrainerInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="uiU-BI-pHj"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Main Page" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="tJw-zK-Xyh">
@@ -49,10 +48,32 @@
                             <constraint firstItem="AKL-vy-Jih" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qM5-Xc-9lV"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <segue destination="XLx-Oo-6gp" kind="presentation" identifier="goToTrainerInfo" modalTransitionStyle="flipHorizontal" id="sBw-Wh-5BN"/>
+                        <segue destination="zvQ-RQ-Hp9" kind="presentation" identifier="goToDiaryRecord" modalTransitionStyle="flipHorizontal" id="GZC-LO-jgY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-95.200000000000003" y="250.52473763118442"/>
+            <point key="canvasLocation" x="-794" y="-46"/>
+        </scene>
+        <!--Weight Record View Controller-->
+        <scene sceneID="IaX-6p-Rcd">
+            <objects>
+                <viewController id="zvQ-RQ-Hp9" customClass="WeightRecordViewController" customModule="GYMDIARY" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Fn2-Vu-l4Q"/>
+                        <viewControllerLayoutGuide type="bottom" id="Qdg-bd-S7I"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PQb-KQ-5cP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.87133253099999997" green="1" blue="0.98758375509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NtS-bT-0iG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="49" y="328"/>
         </scene>
         <!--Trainer Info View Controller-->
         <scene sceneID="fEX-nd-HZy">
@@ -213,7 +234,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LtL-K9-zf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="687" y="251"/>
+            <point key="canvasLocation" x="49" y="-403"/>
         </scene>
     </scenes>
 </document>

@@ -28,6 +28,7 @@ class ViewController: UIViewController{
         DispatchQueue.main.async {
         //print("This is run on the main queue, after the previous code in outer block")
             //self.typeYourWeight()
+            self.performSegue(withIdentifier: "goToTrainerInfo", sender: self)
         }
         
     }
