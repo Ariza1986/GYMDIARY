@@ -18,13 +18,6 @@ class ViewController: UIViewController{
         
         //let myUserDefaults = UserDefaults.standard
         
-        //catch date YYYYMMdd
-        let today = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYYMMdd"
-        print(today)
-        print(formatter.string(from: today))
-        
         DispatchQueue.main.async {
         //print("This is run on the main queue, after the previous code in outer block")
             //self.typeYourWeight()

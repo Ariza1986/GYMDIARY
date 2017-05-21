@@ -19,6 +19,7 @@
 		EFED14321EB8AA7500ECF63B /* GYMDIARYUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED14311EB8AA7500ECF63B /* GYMDIARYUITests.swift */; };
 		EFED14401EB8AF3600ECF63B /* GYMDIARY_icon in Resources */ = {isa = PBXBuildFile; fileRef = EFED143F1EB8AF3600ECF63B /* GYMDIARY_icon */; };
 		EFF384F01ECC4CAC0083DA30 /* launchscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = EFF384EF1ECC4CAC0083DA30 /* launchscreen.png */; };
+		EFF77DB61ED176E5009CB8DF /* TrainerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		EFED14331EB8AA7500ECF63B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFED143F1EB8AF3600ECF63B /* GYMDIARY_icon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GYMDIARY_icon; sourceTree = "<group>"; };
 		EFF384EF1ECC4CAC0083DA30 /* launchscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchscreen.png; sourceTree = "<group>"; };
+		EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainerInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 			children = (
 				EFED14111EB8AA7500ECF63B /* AppDelegate.swift */,
 				EFED14131EB8AA7500ECF63B /* ViewController.swift */,
+				EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */,
 				EF3358201ECD83820098817B /* TrainerInfoViewController.swift */,
 				EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */,
 				EFED14151EB8AA7500ECF63B /* Main.storyboard */,
@@ -284,6 +287,7 @@
 				EF3358211ECD83820098817B /* TrainerInfoViewController.swift in Sources */,
 				EF3358231ECE0CFB0098817B /* WeightRecordViewController.swift in Sources */,
 				EFED14121EB8AA7500ECF63B /* AppDelegate.swift in Sources */,
+				EFF77DB61ED176E5009CB8DF /* TrainerInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
