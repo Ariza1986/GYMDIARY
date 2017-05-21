@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController{
     
-    var trainerInfo = TrainerInfo()
+    var trainerInfo:TrainerInfo? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,19 @@ class ViewController: UIViewController{
                                                 style:UIAlertActionStyle.default,
                                                 handler: nil))
         present(alertController, animated: true, completion: nil)
+    }
+}
+
+//close keyboard by touching anywhere
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
