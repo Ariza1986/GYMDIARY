@@ -14,17 +14,31 @@ enum Sex {
 }
 
 struct DairyData {
-    var date = ""
-    var data = 0.0
+    var date:String
+    var data:Double
+    
+    init() {
+        date = ""
+        data = 0.0
+    }
 }
 
 class TrainerInfo {
-    var name:String = ""
-    var sex:Sex = .Male
-    var birthDay:String = ""
-    var height:Double = 0.0
-    var weight:[DairyData] = []
-    var bodyFat:[DairyData] = []
+    var name:String
+    var sex:Sex
+    var birthDay:String
+    var height:Double
+    var weight:[DairyData]
+    var bodyFat:[DairyData]
+    
+    init() {
+        name = ""
+        sex = .Male
+        birthDay = ""
+        height = 0.0
+        weight = []
+        bodyFat = []
+    }
     
     func showAll() {
         print("name:\t" + "\(name)" + "\n" +

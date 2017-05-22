@@ -18,7 +18,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
     @IBOutlet weak var bodyfatTextField: UITextField!
     
     let sexPicker = UIPickerView()
-    let birthdayPicker = UIPickerView()
+    let birthdayPicker = UIDatePicker()
     let heightPicker = UIPickerView()
     let weightPicker = UIPickerView()
     let bodyfatPicker = UIPickerView()
@@ -26,46 +26,51 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
     var textFieldList:[UITextField]!
     var pickerViewList:[UIPickerView]!
     
-    //catch date YYYYMMdd
-    var todayStr:String?
-    
     let sexPickerData = ["♂", "♀"]
     let heightPickerData = [Int](130...250)
     let weightPickerData = [Int](20...150)
     let bodyFatPickerData = [Int](1...60)
     let decimalsPickerData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+    
+    //catch date YYYYMMdd
+    let today = Date()
+    let formatter = DateFormatter()
+    var todayStr:String?
+    
     var heightData:(num:String, decimals:String)!
     var weightData:(num:String, decimals:String)!
     var bodyFatData:(num:String, decimals:String)!
-    var diaryData = DairyData()
     
+    var diaryData = DairyData()
     var trainerInfo = TrainerInfo()
-    let myUserDefaults = UserDefaults.standard
+    
+    var myUserDefaults :UserDefaults!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //⬇︎⬇︎------SomeViewSetting--------⬇︎⬇︎
+        //⬇︎⬇︎--------ViewSetting----------⬇︎⬇︎
         //close keyboard by touching anywhere
         self.hideKeyboardWhenTappedAround()
         
         //⬇︎⬇︎--------DefaultValue---------⬇︎⬇︎
         //catch date YYYYMMdd
-        let today = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYYMMdd"
+        formatter.dateFormat = "YYYY-MM-dd"
         todayStr = formatter.string(from: today)
         
         heightData = ("170", "0")
         weightData = ("70", "0")
         bodyFatData = ("25", "0")
+        
         diaryData.date = todayStr!
         
-        //⬇︎⬇︎----------UIView-------------⬇︎⬇︎
+        myUserDefaults = UserDefaults.standard
+        
+        //⬇︎⬇︎--------UIView Setting-------⬇︎⬇︎
         textFieldList = [nameTextField, sexTextField, birthdayTextField,
                          heightTextField, weightTextField, bodyfatTextField]
-        pickerViewList = [sexPicker, birthdayPicker, heightPicker, weightPicker, bodyfatPicker]
+        pickerViewList = [sexPicker, heightPicker, weightPicker, bodyfatPicker]
         
         //textfields delegate & tag
         for (index, textField) in textFieldList.enumerated() {
@@ -76,12 +81,27 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         //pickerview delegate & tag & inputview
         for (index, pickerView) in pickerViewList.enumerated() {
             pickerView.delegate = self
-            pickerView.tag = index + 2
-            textFieldList[index + 1].inputView = pickerView
+            
+            if index != 0 {
+                textFieldList[index + 2].inputView = pickerView
+                pickerView.tag = index + 3
+            }
+            else{
+                textFieldList[index + 1].inputView = pickerView
+                pickerView.tag = index + 2
+            }
         }
+        
+        birthdayPicker.datePickerMode = .date
+        birthdayPicker.date = Date()
+        birthdayPicker.minimumDate = formatter.date(from: "1930-01-01")
+        birthdayPicker.maximumDate = formatter.date(from: todayStr!)
+        birthdayPicker.locale = Locale(identifier: "zh_TW")
+        birthdayTextField.inputView = birthdayPicker
+        birthdayPicker.addTarget(self, action: #selector(self.datePickerChanged),for: .valueChanged)
     }
     
-    // UITextFieldDelegate
+    //⬇︎⬇︎--------UITextFieldDelegate----------⬇︎⬇︎
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // User finished typing (hit return): hide the keyboard.
         textField.resignFirstResponder()
@@ -94,28 +114,26 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
                 sexTextField.text = sexPickerData[0]
                 trainerInfo.sex = .Male
             
-            case 3: break
+            case 3:
+                birthdayTextField.text = todayStr!
+                trainerInfo.birthDay = todayStr!
             
             case 4:
-                for (index, height) in heightPickerData.enumerated() {
-                    if height == Int(heightData.num) {
-                        heightPicker.selectRow(index, inComponent: 0, animated: true)
-                    }
-                }
+                heightPicker.selectRow(Int(heightData.num)! - 130, inComponent: 0, animated: true)
                 heightTextField.text = mergeData(data: heightData) + " cm"
                 trainerInfo.height = Double(mergeData(data: heightData))!
             
             case 5:
-                for (index, weight) in weightPickerData.enumerated() {
-                    if weight == Int(weightData.num) {
-                        weightPicker.selectRow(index, inComponent: 0, animated: true)
-                    }
-                }
+                weightPicker.selectRow(Int(weightData.num)! - 20, inComponent: 0, animated: true)
                 weightTextField.text = mergeData(data: weightData) + " kg"
                 diaryData.data = Double(mergeData(data: weightData))!
                 trainerInfo.weight.append(diaryData)
             
-            case 6: break
+            case 6:
+                bodyfatPicker.selectRow(Int(bodyFatData.num)! - 1, inComponent: 0, animated: true)
+                bodyfatTextField.text = mergeData(data: bodyFatData) + " %"
+                diaryData.data = Double(mergeData(data: bodyFatData))!
+                trainerInfo.bodyFat.append(diaryData)
             
             default: break
             }
@@ -137,10 +155,10 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         }
     }
     
-    //PickerView Delegate
+    //⬇︎⬇︎--------PickerView Delegate----------⬇︎⬇︎
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         switch pickerView.tag {
-        case 4, 5:
+        case 4, 5, 6:
             return 2
             
         default:
@@ -163,6 +181,14 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         case 5:
             if component == 0 {
                 return weightPickerData.count
+            }
+            else {
+                return decimalsPickerData.count
+            }
+            
+        case 6:
+            if component == 0 {
+                return bodyFatPickerData.count
             }
             else {
                 return decimalsPickerData.count
@@ -191,6 +217,14 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
             else {
                 return String(decimalsPickerData[row]) + " kg"
+            }
+            
+        case 6:
+            if component == 0 {
+                return String(bodyFatPickerData[row]) + " ."
+            }
+            else {
+                return String(decimalsPickerData[row]) + " %"
             }
             
         default:
@@ -235,7 +269,17 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             trainerInfo.weight.removeAll()
             trainerInfo.weight.append(diaryData)
             
-        case 6: break
+        case 6:
+            if component == 0 {
+                bodyFatData.num = String(bodyFatPickerData[row])
+            }
+            else {
+                bodyFatData.decimals = String(decimalsPickerData[row])
+            }
+            bodyfatTextField.text = mergeData(data: bodyFatData) + " ％"
+            diaryData.data = Double(mergeData(data: bodyFatData))!
+            trainerInfo.bodyFat.removeAll()
+            trainerInfo.bodyFat.append(diaryData)
             
         default: break
         }
@@ -245,7 +289,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         return 66.0
     }
     
-    //Button Event
+    //⬇︎⬇︎--------Button Event----------⬇︎⬇︎
     @IBAction func pressOkButton() {
         trainerInfo.showAll()
         
@@ -258,18 +302,27 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
         }
         if flag == true {
+            //myUserDefaults.set(NSKeyedArchiver.archivedData(withRootObject: trainerInfo), forKey: "trainerInfo")
+            //myUserDefaults.synchronize()
             navigationController?.popViewController(animated: true)
             dismiss(animated: true, completion: nil)
         }
     }
     
+    //⬇︎⬇︎--------Tool Func----------⬇︎⬇︎
+    func mergeData(data : (num:String, decimals:String)) -> String {
+        return "\(data.num)" + "." + "\(data.decimals)"
+    }
+    
+    func datePickerChanged(datePicker:UIDatePicker) {
+        let newDate = formatter.string(from: datePicker.date)
+        birthdayTextField.text = newDate
+        trainerInfo.birthDay = newDate
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func mergeData(data : (num:String, decimals:String)) -> String {
-        return "\(data.num)" + "." + "\(data.decimals)"
     }
 }
 
