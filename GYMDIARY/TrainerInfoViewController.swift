@@ -302,18 +302,14 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
         }
         if flag == true {
-            //myUserDefaults.set(NSKeyedArchiver.archivedData(withRootObject: trainerInfo), forKey: "trainerInfo")
-            //myUserDefaults.synchronize()
+            myUserDefaults.set(trainerInfo.name, forKey: "name")
+            myUserDefaults.synchronize()
             navigationController?.popViewController(animated: true)
             dismiss(animated: true, completion: nil)
         }
     }
     
     //⬇︎⬇︎--------Tool Func----------⬇︎⬇︎
-    func mergeData(data : (num:String, decimals:String)) -> String {
-        return "\(data.num)" + "." + "\(data.decimals)"
-    }
-    
     func datePickerChanged(datePicker:UIDatePicker) {
         let newDate = formatter.string(from: datePicker.date)
         birthdayTextField.text = newDate

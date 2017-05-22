@@ -10,18 +10,36 @@ import UIKit
 
 class ViewController: UIViewController{
     
-    var trainerInfo:TrainerInfo? = nil
+    
+    @IBOutlet weak var trainerName: UILabel!
+    
+    var myUserDefaults :UserDefaults!
+    
+    var info:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        //let myUserDefaults = UserDefaults.standard
+        myUserDefaults = UserDefaults.standard
+        
+        info = myUserDefaults.string(forKey: "name")
+        
+        if info != nil {
+            trainerName.text = info
+        }
+        else {
+            trainerName.text = "尚未儲存資訊"
+            trainerName.textColor = UIColor.red
+        }
         
         DispatchQueue.main.async {
-        //print("This is run on the main queue, after the previous code in outer block")
-            //self.typeYourWeight()
-            self.performSegue(withIdentifier: "goToTrainerInfo", sender: self)
+            if self.info == nil {
+                self.performSegue(withIdentifier: "goToTrainerInfo", sender: self)
+            }
+            else {
+                self.performSegue(withIdentifier: "goToWeightRecord", sender: self)
+            }
         }
         
     }
@@ -32,7 +50,10 @@ class ViewController: UIViewController{
     }
 
     @IBAction func catchNewTrainerInfo() {
-
+        myUserDefaults.removeObject(forKey: "name")
+        
+        trainerName.text = "尚未儲存資訊"
+        trainerName.textColor = UIColor.red
     }
     
     func typeYourWeight() {
@@ -56,6 +77,10 @@ extension UIViewController {
     
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func mergeData(data : (num:String, decimals:String)) -> String {
+        return "\(data.num)" + "." + "\(data.decimals)"
     }
 }
 
