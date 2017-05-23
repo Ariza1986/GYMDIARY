@@ -165,17 +165,8 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsA-5w-Qh9">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsA-5w-Qh9" customClass="CombinedChartView" customModule="Charts">
                                 <rect key="frame" x="0.0" y="278" width="375" height="246"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="linear graph" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsA-ry-TpK">
-                                        <rect key="frame" x="119" y="91" width="137" height="65"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="WsA-5w-Qh9" secondAttribute="height" multiplier="125:88" constant="26.215909090909122" id="mYC-vh-a4Y">
@@ -205,6 +196,7 @@
                     </view>
                     <connections>
                         <outlet property="bodyFatTextField" destination="5A1-E0-val" id="oIs-5k-BNN"/>
+                        <outlet property="combinedChartView" destination="WsA-5w-Qh9" id="L95-mg-uip"/>
                         <outlet property="weightTextField" destination="Grj-Yi-LtH" id="PW7-Vd-ZBS"/>
                     </connections>
                 </viewController>

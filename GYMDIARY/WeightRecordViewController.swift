@@ -7,29 +7,39 @@
 //
 
 import UIKit
+import Charts
+import Realm
 
 class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource{
     
     @IBOutlet weak var weightTextField: UITextField!
     @IBOutlet weak var bodyFatTextField: UITextField!
-    
+    @IBOutlet weak var combinedChartView: CombinedChartView!
+
     let weightPicker = UIPickerView()
     let bodyfatPicker = UIPickerView()
     
+    //for TextField
     var textFieldList:[UITextField]!
     var pickerViewList:[UIPickerView]!
     
+    //for PickerView
     let weightPickerData = [Int](20...150)
     let bodyFatPickerData = [Int](1...60)
     let decimalsPickerData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    var weightData:(num:String, decimals:String)!
+    var bodyFatData:(num:String, decimals:String)!
+    
+    //for ChartView
+    var dateList: [String]!
+    var weightValueList: [Double]!
+    var bodyFatValueList: [Double]!
     
     //catch date YYYYMMdd
     let today = Date()
     let formatter = DateFormatter()
     var todayStr:String?
-    
-    var weightData:(num:String, decimals:String)!
-    var bodyFatData:(num:String, decimals:String)!
     
     var diaryData = DairyData()
     var trainerInfo = TrainerInfo()
@@ -71,6 +81,57 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             pickerView.tag = index + 1
             textFieldList[index].inputView = pickerView
         }
+        
+        //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
+        combinedChartView.backgroundColor = UIColor.white
+        combinedChartView.xAxis.labelPosition = .bottom
+        combinedChartView.chartDescription?.text = "3 months"
+        combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        
+        dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
+        weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 75.5, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
+        bodyFatValueList = [35.3, 27.1, 23.7, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
+        
+        setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
+    }
+    
+    //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
+    func setChart(dateList: [String], weightValueList: [Double], bodyFatValueList: [Double]) {
+        combinedChartView.noDataText = "You need to provide data for the chart."
+        
+        //DataEntry -> DataEntries -> DataSet -> ChartData
+        var barDataEntries: [BarChartDataEntry] = []
+        var lineDataEntries: [ChartDataEntry] = []
+        
+        for i in 0..<dateList.count {
+            let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
+            let lineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
+            barDataEntries.append(barDataEntry)
+            lineDataEntries.append(lineDataEntry)
+        }
+        
+        let barChartSet = BarChartDataSet(values: barDataEntries, label: "Weight: KG")
+        let lineChartSet = LineChartDataSet(values: lineDataEntries, label: "Body Fat: %")
+        
+        //customer setting
+        lineChartSet.colors = [NSUIColor.orange]
+        lineChartSet.circleHoleColor = NSUIColor.white
+        lineChartSet.circleColors = [NSUIColor.orange]
+        lineChartSet.circleHoleRadius = 2
+        lineChartSet.circleRadius = 6
+        lineChartSet.lineWidth = 3
+        
+        let chartData = CombinedChartData()
+        chartData.barData = BarChartData(dataSets: [barChartSet])
+        chartData.lineData = LineChartData(dataSets: [lineChartSet])
+        
+        //set xAxis offset
+        combinedChartView.xAxis.axisMinimum = -0.5;
+        combinedChartView.xAxis.axisMaximum = Double(dateList.count) - 0.5;
+        //set xAxis label
+        combinedChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:dateList)
+        //set ChartView data
+        combinedChartView.data = chartData
     }
     
     //⬇︎⬇︎--------UITextFieldDelegate----------⬇︎⬇︎
