@@ -288,7 +288,6 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
     
     //⬇︎⬇︎--------Button Event----------⬇︎⬇︎
     @IBAction func pressOkButton() {
-        info.showAll()
         
         var flag = true
         
@@ -299,12 +298,34 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
         }
         if flag == true {
+            info.today = Date()
+            
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
             UserDefaults.standard.set(encodedData, forKey: "info")
             myUserDefaults.synchronize()
             
-            navigationController?.popViewController(animated: true)
-            dismiss(animated: true, completion: nil)
+            info.showAll()
+            
+            //db writeData
+            dbWriteData()
+            
+            self.performSegue(withIdentifier: "newTrainerInfoBackToMainView", sender: self)
+        }
+    }
+    
+    //⬇︎⬇︎--------RLM_DB----------⬇︎⬇︎
+    func dbWriteData() {
+        let realm = try! Realm()
+        let dairyRecord = RLM_DairyRecord()
+        
+        dairyRecord.date = NSDate()
+        dairyRecord.weight = info.weight
+        dairyRecord.bodyFat = info.bodyFat
+        
+        try! realm.write {
+            realm.add(dairyRecord)
+            
+            print("DB write success")
         }
     }
     

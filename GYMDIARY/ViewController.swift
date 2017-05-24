@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ViewController: UIViewController{
-    
     
     @IBOutlet weak var trainerName: UILabel!
     
@@ -27,13 +27,13 @@ class ViewController: UIViewController{
             let trainerInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as? TrainerInfo {
             info = trainerInfo
         } else {
-            print("There is an issue")
+            print("show new trainer info view")
         }
 
-        if info.name != "" {
+        if info.name != "" { //go Scale View
             trainerName.text = info.name
         }
-        else {
+        else {//go New Trainer Info
             trainerName.text = "尚未儲存資訊"
             trainerName.textColor = UIColor.red
         }
@@ -49,17 +49,16 @@ class ViewController: UIViewController{
                 self.performSegue(withIdentifier: "goToWeightRecord", sender: self)
             }
         }
-        
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     @IBAction func resetTrainerInfo() {
         myUserDefaults.removeObject(forKey: "info")
         myUserDefaults.synchronize()
+        
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
         
         trainerName.text = "尚未儲存資訊"
         trainerName.textColor = UIColor.red
@@ -73,6 +72,11 @@ class ViewController: UIViewController{
                                                 style:UIAlertActionStyle.default,
                                                 handler: nil))
         present(alertController, animated: true, completion: nil)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }
 
@@ -93,3 +97,29 @@ extension UIViewController {
     }
 }
 
+extension Date {
+    
+    /// Returns a Date with the specified days added to the one it is called with
+    func add(years: Int = 0, months: Int = 0, days: Int = 0, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) -> Date {
+        var targetDay: Date
+        targetDay = Calendar.current.date(byAdding: .year, value: years, to: self)!
+        targetDay = Calendar.current.date(byAdding: .month, value: months, to: targetDay)!
+        targetDay = Calendar.current.date(byAdding: .day, value: days, to: targetDay)!
+        targetDay = Calendar.current.date(byAdding: .hour, value: hours, to: targetDay)!
+        targetDay = Calendar.current.date(byAdding: .minute, value: minutes, to: targetDay)!
+        targetDay = Calendar.current.date(byAdding: .second, value: seconds, to: targetDay)!
+        return targetDay
+    }
+    
+    /// Returns a Date with the specified days subtracted from the one it is called with
+    func subtract(years: Int = 0, months: Int = 0, days: Int = 0, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) -> Date {
+        let inverseYears = -1 * years
+        let inverseMonths = -1 * months
+        let inverseDays = -1 * days
+        let inverseHours = -1 * hours
+        let inverseMinutes = -1 * minutes
+        let inverseSeconds = -1 * seconds
+        return add(years: inverseYears, months: inverseMonths, days: inverseDays, hours: inverseHours, minutes: inverseMinutes, seconds: inverseSeconds)
+    }
+    
+}

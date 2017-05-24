@@ -145,6 +145,7 @@
                                         </state>
                                         <connections>
                                             <action selector="pressOkButton" destination="XLx-Oo-6gp" eventType="touchUpInside" id="3hd-Ym-P7k"/>
+                                            <action selector="pressSkipButton" destination="zvQ-RQ-Hp9" eventType="touchUpInside" id="PXw-j8-fIR"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IjB-84-xEC">
@@ -198,11 +199,12 @@
                         <outlet property="bodyFatTextField" destination="5A1-E0-val" id="oIs-5k-BNN"/>
                         <outlet property="combinedChartView" destination="WsA-5w-Qh9" id="L95-mg-uip"/>
                         <outlet property="weightTextField" destination="Grj-Yi-LtH" id="PW7-Vd-ZBS"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="scaleBackToMainView" modalTransitionStyle="flipHorizontal" id="8eg-sR-dtS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NtS-bT-0iG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-698" y="296"/>
+            <point key="canvasLocation" x="-514" y="332"/>
         </scene>
         <!--Trainer Info View Controller-->
         <scene sceneID="fEX-nd-HZy">
@@ -359,11 +361,15 @@
                         <outlet property="nameTextField" destination="DwK-bX-hh2" id="L44-87-Fj7"/>
                         <outlet property="sexTextField" destination="lo9-Yq-Q7X" id="r4E-qH-LLZ"/>
                         <outlet property="weightTextField" destination="QYb-bx-P5W" id="vzd-fE-eeC"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="newTrainerInfoBackToMainView" modalTransitionStyle="flipHorizontal" id="8gn-cq-Zc5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LtL-K9-zf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1420" y="297"/>
+            <point key="canvasLocation" x="-1559" y="331"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="8eg-sR-dtS"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -32,9 +32,9 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     var bodyFatData:(num:Int, decimals:Int)!
     
     //for ChartView
-    var dateList: [String]!
-    var weightValueList: [Double]!
-    var bodyFatValueList: [Double]!
+    var dateList: [String]! = []
+    var weightValueList: [Double]! = []
+    var bodyFatValueList: [Double]! = []
     
     //catch date YYYYMMdd
     let today = Date()
@@ -53,7 +53,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         
         //⬇︎⬇︎--------DefaultValue---------⬇︎⬇︎
         //catch date YYYYMMdd
-        formatter.dateFormat = "YYYY-MM-dd"
+        formatter.dateFormat = "MM/dd"
         todayStr = formatter.string(from: today)
         
         myUserDefaults = UserDefaults.standard
@@ -94,10 +94,11 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         combinedChartView.chartDescription?.text = "3 months"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
-        dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
-        weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 0.0, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
-        bodyFatValueList = [35.3, 27.1, 0.0, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
+        //dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
+        //weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 0.0, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
+        //bodyFatValueList = [35.3, 27.1, 0.0, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
         
+        getChartDataList()
         setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
     }
     
@@ -110,15 +111,17 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         var lineDataEntries: [ChartDataEntry] = []
         
         for i in 0..<dateList.count {
-            let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
-            let lineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
+            //if i % 9 == 0 {
+                let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
+                let lineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
             
-            if !weightValueList[i].isZero {
-                barDataEntries.append(barDataEntry)
-            }
-            if !bodyFatValueList[i].isZero {
-                lineDataEntries.append(lineDataEntry)
-            }
+                if !weightValueList[i].isZero{
+                    barDataEntries.append(barDataEntry)
+                }
+                if !bodyFatValueList[i].isZero{
+                    lineDataEntries.append(lineDataEntry)
+                }
+            //}
         }
         
         let barChartSet = BarChartDataSet(values: barDataEntries, label: "Weight: KG")
@@ -128,6 +131,8 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         lineChartSet.colors = [NSUIColor.orange]
         lineChartSet.circleHoleColor = NSUIColor.white
         lineChartSet.circleColors = [NSUIColor.orange]
+        lineChartSet.circleHoleRadius = 2
+        lineChartSet.circleRadius = 5
         lineChartSet.lineWidth = 3
         
         let chartData = CombinedChartData()
@@ -143,7 +148,22 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         combinedChartView.data = chartData
     }
     
-    //⬇︎⬇︎--------UITextFieldDelegate----------⬇︎⬇︎
+    //⬇︎⬇︎----------GetChartDataList-----------⬇︎⬇︎
+    func getChartDataList() {
+        let realm = try! Realm()
+        let dairyRecords = realm.objects(RLM_DairyRecord.self)
+        if dairyRecords.count > 0 {
+            for (index, record) in dairyRecords.enumerated() {
+                if index % 5 == 0 {
+                    dateList.append(formatter.string(from: record.date as Date))
+                    weightValueList.append(record.weight)
+                    bodyFatValueList.append(record.bodyFat)
+                }
+            }
+        }
+    }
+    
+    //⬇︎⬇︎---------UITextFieldDelegate---------⬇︎⬇︎
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // User finished typing (hit return): hide the keyboard.
         textField.resignFirstResponder()
@@ -274,16 +294,22 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             UserDefaults.standard.set(encodedData, forKey: "info")
             myUserDefaults.synchronize()
             
-            navigationController?.popViewController(animated: true)
-            dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
         }
         
         info.showAll()
     }
     
     @IBAction func pressSkipButton() {
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
+        info.today = Date()
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
+        UserDefaults.standard.set(encodedData, forKey: "info")
+        myUserDefaults.synchronize()
+        
+        self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
+        
+        //navigationController?.popViewController(animated: true)
+        //dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

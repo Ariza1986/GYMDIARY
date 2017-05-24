@@ -13,7 +13,7 @@ class RLM_DairyRecord:Object {
     private(set) dynamic var uuid:String = UUID().uuidString
     dynamic var date:NSDate = NSDate()
     dynamic var weight:Double = 0.0
-    dynamic var bodFat:Double = 0.0
+    dynamic var bodyFat:Double = 0.0
     
     override static func primaryKey() -> String {
         return "uuid"
