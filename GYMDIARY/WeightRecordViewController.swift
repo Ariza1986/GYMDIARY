@@ -8,7 +8,7 @@
 
 import UIKit
 import Charts
-import Realm
+import RealmSwift
 
 class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource{
     
@@ -28,8 +28,8 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     let bodyFatPickerData = [Int](1...60)
     let decimalsPickerData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     
-    var weightData:(num:String, decimals:String)!
-    var bodyFatData:(num:String, decimals:String)!
+    var weightData:(num:Int, decimals:Int)!
+    var bodyFatData:(num:Int, decimals:Int)!
     
     //for ChartView
     var dateList: [String]!
@@ -41,9 +41,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     let formatter = DateFormatter()
     var todayStr:String?
     
-    var diaryData = DairyData()
-    var trainerInfo = TrainerInfo()
-    
+    var info:TrainerInfo!
     var myUserDefaults :UserDefaults!
     
     override func viewDidLoad() {
@@ -57,13 +55,21 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         //catch date YYYYMMdd
         formatter.dateFormat = "YYYY-MM-dd"
         todayStr = formatter.string(from: today)
-
-        weightData = ("70", "0")
-        bodyFatData = ("25", "0")
-        
-        diaryData.date = todayStr!
         
         myUserDefaults = UserDefaults.standard
+        
+        if let data = UserDefaults.standard.data(forKey: "info"),
+            let trainerInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as? TrainerInfo {
+            info = trainerInfo
+        }
+        
+        let wDecimals = Int(info.weight * 10) % 10
+        let bDecimals = Int(info.bodyFat * 10) % 10
+        weightData = (Int(info.weight), wDecimals)
+        bodyFatData = (Int(info.bodyFat), bDecimals)
+        
+        weightTextField.placeholder = String(info.weight) + " kg"
+        bodyFatTextField.placeholder = String(info.bodyFat) + " %"
         
         //⬇︎⬇︎--------UIView Setting-------⬇︎⬇︎
         textFieldList = [weightTextField, bodyFatTextField]
@@ -82,15 +88,15 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             textFieldList[index].inputView = pickerView
         }
         
-        //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
+        //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
         combinedChartView.backgroundColor = UIColor.white
         combinedChartView.xAxis.labelPosition = .bottom
         combinedChartView.chartDescription?.text = "3 months"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
         dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
-        weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 75.5, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
-        bodyFatValueList = [35.3, 27.1, 23.7, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
+        weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 0.0, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
+        bodyFatValueList = [35.3, 27.1, 0.0, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
         
         setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
     }
@@ -106,8 +112,13 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         for i in 0..<dateList.count {
             let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
             let lineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
-            barDataEntries.append(barDataEntry)
-            lineDataEntries.append(lineDataEntry)
+            
+            if !weightValueList[i].isZero {
+                barDataEntries.append(barDataEntry)
+            }
+            if !bodyFatValueList[i].isZero {
+                lineDataEntries.append(lineDataEntry)
+            }
         }
         
         let barChartSet = BarChartDataSet(values: barDataEntries, label: "Weight: KG")
@@ -117,8 +128,6 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         lineChartSet.colors = [NSUIColor.orange]
         lineChartSet.circleHoleColor = NSUIColor.white
         lineChartSet.circleColors = [NSUIColor.orange]
-        lineChartSet.circleHoleRadius = 2
-        lineChartSet.circleRadius = 6
         lineChartSet.lineWidth = 3
         
         let chartData = CombinedChartData()
@@ -144,16 +153,16 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         if (textField.text?.isEmpty)! {
             switch textField.tag {
             case 1:
-                weightPicker.selectRow(Int(weightData.num)! - 20, inComponent: 0, animated: true)
-                weightTextField.text = mergeData(data: weightData) + " kg"
-                diaryData.data = Double(mergeData(data: weightData))!
-                trainerInfo.weight.append(diaryData)
+                weightPicker.selectRow(weightData.num - 20, inComponent: 0, animated: true)
+                weightPicker.selectRow(weightData.decimals, inComponent: 1, animated: true)
+                weightTextField.text = String(mergeData(data: weightData)) + " kg"
+                info.weight = mergeData(data: weightData)
                 
             case 2:
-                bodyfatPicker.selectRow(Int(bodyFatData.num)! - 1, inComponent: 0, animated: true)
-                bodyFatTextField.text = mergeData(data: bodyFatData) + " %"
-                diaryData.data = Double(mergeData(data: bodyFatData))!
-                trainerInfo.bodyFat.append(diaryData)
+                bodyfatPicker.selectRow(bodyFatData.num - 1, inComponent: 0, animated: true)
+                bodyfatPicker.selectRow(bodyFatData.decimals, inComponent: 1, animated: true)
+                bodyFatTextField.text = String(mergeData(data: bodyFatData)) + " %"
+                info.bodyFat = mergeData(data: bodyFatData)
                 
             default: break
             }
@@ -222,27 +231,23 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         switch pickerView.tag {
         case 1:
             if component == 0 {
-                weightData.num = String(weightPickerData[row])
+                weightData.num = weightPickerData[row]
             }
             else {
-                weightData.decimals = String(decimalsPickerData[row])
+                weightData.decimals = decimalsPickerData[row]
             }
-            weightTextField.text = mergeData(data: weightData) + " kg"
-            diaryData.data = Double(mergeData(data: weightData))!
-            trainerInfo.weight.removeAll()
-            trainerInfo.weight.append(diaryData)
+            weightTextField.text = String(mergeData(data: weightData)) + " kg"
+            info.weight = mergeData(data: weightData)
             
         case 2:
             if component == 0 {
-                bodyFatData.num = String(bodyFatPickerData[row])
+                bodyFatData.num = bodyFatPickerData[row]
             }
             else {
-                bodyFatData.decimals = String(decimalsPickerData[row])
+                bodyFatData.decimals = decimalsPickerData[row]
             }
-            bodyFatTextField.text = mergeData(data: bodyFatData) + " ％"
-            diaryData.data = Double(mergeData(data: bodyFatData))!
-            trainerInfo.bodyFat.removeAll()
-            trainerInfo.bodyFat.append(diaryData)
+            bodyFatTextField.text = String(mergeData(data: bodyFatData)) + " ％"
+            info.bodyFat = mergeData(data: bodyFatData)
             
         default: break
         }
@@ -254,7 +259,6 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
 
     //⬇︎⬇︎--------Button Event----------⬇︎⬇︎
     @IBAction func pressOkButton() {
-        trainerInfo.showAll()
         
         var flag = true
         
@@ -265,9 +269,21 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             }
         }
         if flag == true {
+            info.today = Date()
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
+            UserDefaults.standard.set(encodedData, forKey: "info")
+            myUserDefaults.synchronize()
+            
             navigationController?.popViewController(animated: true)
             dismiss(animated: true, completion: nil)
         }
+        
+        info.showAll()
+    }
+    
+    @IBAction func pressSkipButton() {
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

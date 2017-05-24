@@ -152,9 +152,9 @@
 		EFED14101EB8AA7500ECF63B /* GYMDIARY */ = {
 			isa = PBXGroup;
 			children = (
-				EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */,
 				EFED14111EB8AA7500ECF63B /* AppDelegate.swift */,
 				EFED14131EB8AA7500ECF63B /* ViewController.swift */,
+				EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */,
 				EF3358201ECD83820098817B /* TrainerInfoViewController.swift */,
 				EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */,
 				EFED14151EB8AA7500ECF63B /* Main.storyboard */,

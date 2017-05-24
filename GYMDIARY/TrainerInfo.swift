@@ -7,24 +7,57 @@
 //
 
 import Foundation
+import RealmSwift
 
-enum Sex {
-    case Male
-    case Female
+class RLM_DairyRecord:Object {
+    private(set) dynamic var uuid:String = UUID().uuidString
+    dynamic var date:NSDate = NSDate()
+    dynamic var weight:Double = 0.0
+    dynamic var bodFat:Double = 0.0
+    
+    override static func primaryKey() -> String {
+        return "uuid"
+    }
 }
 
-struct DairyData {
-    var date = ""
-    var data = 0.0
-}
-
-class TrainerInfo {
-    var name:String = ""
-    var sex:Sex = .Male
-    var birthDay:String = ""
-    var height:Double = 0.0
-    var weight:[DairyData] = []
-    var bodyFat:[DairyData] = []
+class TrainerInfo: NSObject, NSCoding {
+    var name:String
+    var sex:String
+    var birthDay:String
+    var height:Double
+    var weight:Double
+    var bodyFat:Double
+    var today:Date
+    
+    override init() {
+        name = ""
+        sex = "♂"
+        birthDay = ""
+        height = 0.0
+        weight = 0.0
+        bodyFat = 0.0
+        today = Date()
+    }
+    
+    required init(coder decoder: NSCoder) {
+        self.name = decoder.decodeObject(forKey: "name") as? String ?? ""
+        self.sex = decoder.decodeObject(forKey: "sex") as? String ?? "♂"
+        self.birthDay = decoder.decodeObject(forKey: "birthDay") as? String ?? ""
+        self.height = decoder.decodeDouble(forKey: "height")
+        self.weight = decoder.decodeDouble(forKey: "weight")
+        self.bodyFat = decoder.decodeDouble(forKey: "bodyFat")
+        self.today = decoder.decodeObject(forKey: "today") as? Date ?? Date()
+    }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(name, forKey: "name")
+        coder.encode(sex, forKey: "sex")
+        coder.encode(birthDay, forKey: "birthDay")
+        coder.encode(height, forKey: "height")
+        coder.encode(weight, forKey: "weight")
+        coder.encode(bodyFat, forKey: "bodyFat")
+        coder.encode(today, forKey: "today")
+    }
     
     func showAll() {
         print("name:\t" + "\(name)" + "\n" +
@@ -32,6 +65,7 @@ class TrainerInfo {
             "birthDay:\t" + "\(birthDay)" + "\n" +
             "height:\t" + "\(height)" + "\n" +
             "weight:\t" + "\(weight)" + "\n" +
-            "bodyFat:\t" + "\(bodyFat)")
+            "bodyFat:\t" + "\(bodyFat)" + "\n" +
+            "today:\t" + "\(today)")
     }
 }

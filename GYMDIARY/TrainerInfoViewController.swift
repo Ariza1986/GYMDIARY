@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource{
     
@@ -38,13 +39,11 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
     let formatter = DateFormatter()
     var todayStr:String?
     
-    var heightData:(num:String, decimals:String)!
-    var weightData:(num:String, decimals:String)!
-    var bodyFatData:(num:String, decimals:String)!
+    var heightData:(num:Int, decimals:Int)!
+    var weightData:(num:Int, decimals:Int)!
+    var bodyFatData:(num:Int, decimals:Int)!
     
-    var diaryData = DairyData()
-    var trainerInfo = TrainerInfo()
-    
+    let info = TrainerInfo()
     var myUserDefaults :UserDefaults!
     
     override func viewDidLoad() {
@@ -59,11 +58,9 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         formatter.dateFormat = "YYYY-MM-dd"
         todayStr = formatter.string(from: today)
         
-        heightData = ("170", "0")
-        weightData = ("70", "0")
-        bodyFatData = ("25", "0")
-        
-        diaryData.date = todayStr!
+        heightData = (170, 0)
+        weightData = (70, 0)
+        bodyFatData = (25, 0)
         
         myUserDefaults = UserDefaults.standard
         
@@ -92,6 +89,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
         }
         
+        //date pickerview
         birthdayPicker.datePickerMode = .date
         birthdayPicker.date = Date()
         birthdayPicker.minimumDate = formatter.date(from: "1930-01-01")
@@ -112,28 +110,26 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             switch textField.tag {
             case 2:
                 sexTextField.text = sexPickerData[0]
-                trainerInfo.sex = .Male
+                info.sex = sexPickerData[0]
             
             case 3:
                 birthdayTextField.text = todayStr!
-                trainerInfo.birthDay = todayStr!
+                info.birthDay = todayStr!
             
             case 4:
-                heightPicker.selectRow(Int(heightData.num)! - 130, inComponent: 0, animated: true)
-                heightTextField.text = mergeData(data: heightData) + " cm"
-                trainerInfo.height = Double(mergeData(data: heightData))!
+                heightPicker.selectRow(heightData.num - 130, inComponent: 0, animated: true)
+                heightTextField.text = String(mergeData(data: heightData)) + " cm"
+                info.height = mergeData(data: heightData)
             
             case 5:
-                weightPicker.selectRow(Int(weightData.num)! - 20, inComponent: 0, animated: true)
-                weightTextField.text = mergeData(data: weightData) + " kg"
-                diaryData.data = Double(mergeData(data: weightData))!
-                trainerInfo.weight.append(diaryData)
+                weightPicker.selectRow(weightData.num - 20, inComponent: 0, animated: true)
+                weightTextField.text = String(mergeData(data: weightData)) + " kg"
+                info.weight = mergeData(data: weightData)
             
             case 6:
-                bodyfatPicker.selectRow(Int(bodyFatData.num)! - 1, inComponent: 0, animated: true)
-                bodyfatTextField.text = mergeData(data: bodyFatData) + " %"
-                diaryData.data = Double(mergeData(data: bodyFatData))!
-                trainerInfo.bodyFat.append(diaryData)
+                bodyfatPicker.selectRow(bodyFatData.num - 1, inComponent: 0, animated: true)
+                bodyfatTextField.text = String(mergeData(data: bodyFatData)) + " %"
+                info.bodyFat = mergeData(data: bodyFatData)
             
             default: break
             }
@@ -149,7 +145,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         
         switch textField.tag {
         case 1:
-            trainerInfo.name = textField.text!
+            info.name = textField.text!
 
         default: break
         }
@@ -238,49 +234,43 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         case 2:
             if row == 0{
                 sexTextField.text = sexPickerData[row]
-                trainerInfo.sex = .Male
+                info.sex = sexPickerData[row]
             }
             else{
                 sexTextField.text = sexPickerData[row]
-                trainerInfo.sex = .Female
+                info.sex = sexPickerData[row]
             }
-            
-        case 3: break
             
         case 4:
             if component == 0 {
-                heightData.num = String(heightPickerData[row])
+                heightData.num = heightPickerData[row]
             }
             else {
-                heightData.decimals = String(decimalsPickerData[row])
+                heightData.decimals = decimalsPickerData[row]
             }
-            heightTextField.text = mergeData(data: heightData) + " cm"
-            trainerInfo.height = Double(mergeData(data: heightData))!
+            heightTextField.text = String(mergeData(data: heightData)) + " cm"
+            info.height = mergeData(data: heightData)
 
         case 5:
             if component == 0 {
-                weightData.num = String(weightPickerData[row])
+                weightData.num = weightPickerData[row]
             }
             else {
-                weightData.decimals = String(decimalsPickerData[row])
+                weightData.decimals = decimalsPickerData[row]
             }
-            weightTextField.text = mergeData(data: weightData) + " kg"
-            diaryData.data = Double(mergeData(data: weightData))!
-            trainerInfo.weight.removeAll()
-            trainerInfo.weight.append(diaryData)
+            weightTextField.text = String(mergeData(data: weightData)) + " kg"
+            info.weight = mergeData(data: weightData)
             
         case 6:
             if component == 0 {
-                bodyFatData.num = String(bodyFatPickerData[row])
+                bodyFatData.num = bodyFatPickerData[row]
             }
             else {
-                bodyFatData.decimals = String(decimalsPickerData[row])
+                bodyFatData.decimals = decimalsPickerData[row]
             }
-            bodyfatTextField.text = mergeData(data: bodyFatData) + " ％"
-            diaryData.data = Double(mergeData(data: bodyFatData))!
-            trainerInfo.bodyFat.removeAll()
-            trainerInfo.bodyFat.append(diaryData)
-            
+            bodyfatTextField.text = String(mergeData(data: bodyFatData)) + " ％"
+            info.bodyFat = mergeData(data: bodyFatData)
+
         default: break
         }
     }
@@ -289,9 +279,16 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         return 66.0
     }
     
+    //⬇︎⬇︎--------UIDatePicker----------⬇︎⬇︎
+    func datePickerChanged(datePicker:UIDatePicker) {
+        let newDate = formatter.string(from: datePicker.date)
+        birthdayTextField.text = newDate
+        info.birthDay = newDate
+    }
+    
     //⬇︎⬇︎--------Button Event----------⬇︎⬇︎
     @IBAction func pressOkButton() {
-        trainerInfo.showAll()
+        info.showAll()
         
         var flag = true
         
@@ -302,18 +299,13 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             }
         }
         if flag == true {
-            myUserDefaults.set(trainerInfo.name, forKey: "name")
+            let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
+            UserDefaults.standard.set(encodedData, forKey: "info")
             myUserDefaults.synchronize()
+            
             navigationController?.popViewController(animated: true)
             dismiss(animated: true, completion: nil)
         }
-    }
-    
-    //⬇︎⬇︎--------Tool Func----------⬇︎⬇︎
-    func datePickerChanged(datePicker:UIDatePicker) {
-        let newDate = formatter.string(from: datePicker.date)
-        birthdayTextField.text = newDate
-        trainerInfo.birthDay = newDate
     }
     
     override func didReceiveMemoryWarning() {

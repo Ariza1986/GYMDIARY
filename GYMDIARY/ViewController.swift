@@ -13,31 +13,39 @@ class ViewController: UIViewController{
     
     @IBOutlet weak var trainerName: UILabel!
     
-    var myUserDefaults :UserDefaults!
+    var info = TrainerInfo()
+    var myUserDefaults = UserDefaults()
     
-    var info:String?
+    let formatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        myUserDefaults = UserDefaults.standard
-        
-        info = myUserDefaults.string(forKey: "name")
-        
-        if info != nil {
-            trainerName.text = info
+        //get info
+        if let data = UserDefaults.standard.data(forKey: "info"),
+            let trainerInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as? TrainerInfo {
+            info = trainerInfo
+        } else {
+            print("There is an issue")
+        }
+
+        if info.name != "" {
+            trainerName.text = info.name
         }
         else {
             trainerName.text = "尚未儲存資訊"
             trainerName.textColor = UIColor.red
         }
         
+        formatter.dateFormat = "YYYY-MM-dd hh:mm"
+        let today = formatter.string(from: info.today)
+        
         DispatchQueue.main.async {
-            if self.info == nil {
+            if self.info.name == "" {
                 self.performSegue(withIdentifier: "goToTrainerInfo", sender: self)
             }
-            else {
+            else if today != self.formatter.string(from: Date()) {
                 self.performSegue(withIdentifier: "goToWeightRecord", sender: self)
             }
         }
@@ -49,8 +57,9 @@ class ViewController: UIViewController{
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func catchNewTrainerInfo() {
-        myUserDefaults.removeObject(forKey: "name")
+    @IBAction func resetTrainerInfo() {
+        myUserDefaults.removeObject(forKey: "info")
+        myUserDefaults.synchronize()
         
         trainerName.text = "尚未儲存資訊"
         trainerName.textColor = UIColor.red
@@ -79,8 +88,8 @@ extension UIViewController {
         view.endEditing(true)
     }
     
-    func mergeData(data : (num:String, decimals:String)) -> String {
-        return "\(data.num)" + "." + "\(data.decimals)"
+    func mergeData(data : (num:Int, decimals:Int)) -> Double {
+        return Double("\(data.num)" + "." + "\(data.decimals)")!
     }
 }
 
