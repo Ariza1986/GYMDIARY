@@ -32,6 +32,8 @@ class ViewController: UIViewController{
 
         if info.name != "" { //go Scale View
             trainerName.text = info.name
+            
+            info.showAll()
         }
         else {//go New Trainer Info
             trainerName.text = "尚未儲存資訊"

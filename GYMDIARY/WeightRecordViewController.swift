@@ -92,54 +92,95 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
         combinedChartView.backgroundColor = UIColor.white
         combinedChartView.xAxis.labelPosition = .bottom
-        combinedChartView.chartDescription?.text = "3 months"
+        combinedChartView.chartDescription?.text = "week"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
-        getChartDataList()
-        setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
-    
+        getChartDataList(before: "week")
+        setChart(chartType: "bar")
+        
+        //⬇︎⬇︎--------Segmented Ctrl-------⬇︎⬇︎
+        chartViewSegCtrl.addTarget(self,action: #selector(onChange),for: .valueChanged)
+        
         //dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
         //weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 0.0, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
         //bodyFatValueList = [35.3, 27.1, 0.0, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
         //setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
     }
     
+    //⬇︎⬇︎------------Segmented Ctrl-----------⬇︎⬇︎
+    func onChange(sender: UISegmentedControl) {
+        dateList.removeAll()
+        weightValueList.removeAll()
+        bodyFatValueList.removeAll()
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            getChartDataList(before: "week")
+            setChart(chartType: "bar")
+        case 1:
+            getChartDataList(before: "2 weeks")
+            setChart(chartType: "bar")
+        case 2:
+            getChartDataList(before: "3 months")
+            setChart(chartType: "line")
+        case 3:
+            getChartDataList(before: "1 year")
+            setChart(chartType: "line")
+        default:
+            break
+        }
+        
+        combinedChartView.chartDescription?.text = "\(sender.titleForSegment(at: sender.selectedSegmentIndex)!)"
+        combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+    }
+    
     //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
-    func setChart(dateList: [String], weightValueList: [Double], bodyFatValueList: [Double]) {
+    func setChart(chartType: String) {
         combinedChartView.noDataText = "You need to provide data for the chart."
         
         //DataEntry -> DataEntries -> DataSet -> ChartData
         var barDataEntries: [BarChartDataEntry] = []
-        var lineDataEntries: [ChartDataEntry] = []
+        var wLineDataEntries: [ChartDataEntry] = []
+        var bLineDataEntries: [ChartDataEntry] = []
         
         for i in 0..<dateList.count {
-            //if i % 9 == 0 {
-                let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
-                let lineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
+            let barDataEntry = BarChartDataEntry(x: Double(i), yValues: [weightValueList[i]])
+            let wLineDataEntry = ChartDataEntry(x: Double(i), y: weightValueList[i])
+            let bLineDataEntry = ChartDataEntry(x: Double(i), y: bodyFatValueList[i])
             
-                if !weightValueList[i].isZero{
-                    barDataEntries.append(barDataEntry)
-                }
-                if !bodyFatValueList[i].isZero{
-                    lineDataEntries.append(lineDataEntry)
-                }
-            //}
+            if !weightValueList[i].isZero{
+                barDataEntries.append(barDataEntry)
+                wLineDataEntries.append(wLineDataEntry)
+            }
+            if !bodyFatValueList[i].isZero{
+                bLineDataEntries.append(bLineDataEntry)
+            }
         }
         
         let barChartSet = BarChartDataSet(values: barDataEntries, label: "Weight: KG")
-        let lineChartSet = LineChartDataSet(values: lineDataEntries, label: "Body Fat: %")
+        let wLineChartSet = ScatterChartDataSet(values: wLineDataEntries, label: "Weight: KG")
+        let bLineChartSet = LineChartDataSet(values: bLineDataEntries, label: "Body Fat: %")
         
         //customer setting
-        lineChartSet.colors = [NSUIColor.orange]
-        lineChartSet.circleHoleColor = NSUIColor.white
-        lineChartSet.circleColors = [NSUIColor.orange]
-        lineChartSet.circleHoleRadius = 2
-        lineChartSet.circleRadius = 5
-        lineChartSet.lineWidth = 3
-        
+        bLineChartSet.colors = [NSUIColor.orange]
+        bLineChartSet.circleHoleColor = NSUIColor.white
+        bLineChartSet.circleColors = [NSUIColor.orange]
+
         let chartData = CombinedChartData()
-        chartData.barData = BarChartData(dataSets: [barChartSet])
-        chartData.lineData = LineChartData(dataSets: [lineChartSet])
+        
+        if chartType == "line" && dateList.count > 20{
+            chartData.scatterData = ScatterChartData(dataSets: [wLineChartSet])
+            wLineChartSet.scatterShapeSize = 6
+            bLineChartSet.drawCirclesEnabled = false
+            bLineChartSet.lineWidth = 5
+        }
+        else {
+            chartData.barData = BarChartData(dataSets: [barChartSet])
+            bLineChartSet.circleHoleRadius = 2
+            bLineChartSet.circleRadius = 5
+            bLineChartSet.lineWidth = 3
+        }
+        chartData.lineData = LineChartData(dataSets: [bLineChartSet])
         
         //set xAxis offset
         combinedChartView.xAxis.axisMinimum = -0.5;
@@ -151,12 +192,31 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     }
     
     //⬇︎⬇︎----------GetChartDataList-----------⬇︎⬇︎
-    func getChartDataList() {
+    func getChartDataList(before: String) {
         let realm = try! Realm()
-        let dairyRecords = realm.objects(RLM_DairyRecord.self)
+        var predicate:NSPredicate!
+        
+        switch before {
+        case "2 weeks":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 14) as NSDate)
+        case "1 months":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 30) as NSDate)
+        case "2 months":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 60) as NSDate)
+        case "3 months":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 90) as NSDate)
+        case "6 months":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 180) as NSDate)
+        case "1 year":
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 365) as NSDate)
+        default:
+            predicate = NSPredicate(format: "date > %@", Date().subtract(days: 7) as NSDate)
+        }
+        
+        let dairyRecords = realm.objects(RLM_DairyRecord.self).filter(predicate)
         if dairyRecords.count > 0 {
             for (index, record) in dairyRecords.enumerated() {
-                if index % 5 == 0 {
+                if index % 1 == 0 {
                     dateList.append(formatter.string(from: record.date as Date))
                     weightValueList.append(record.weight)
                     bodyFatValueList.append(record.bodyFat)
@@ -292,26 +352,24 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         }
         if flag == true {
             info.today = Date()
+            
             let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
             UserDefaults.standard.set(encodedData, forKey: "info")
             myUserDefaults.synchronize()
             
+            info.showAll()
+            
+            writeDairyRecord()
+            
             self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
         }
-        
-        info.showAll()
     }
     
     @IBAction func pressSkipButton() {
-        info.today = Date()
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: info)
-        UserDefaults.standard.set(encodedData, forKey: "info")
-        myUserDefaults.synchronize()
+        //self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
         
-        self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
-        
-        //navigationController?.popViewController(animated: true)
-        //dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     //⬇︎⬇︎--------RLM_DB----------⬇︎⬇︎

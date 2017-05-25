@@ -60,12 +60,12 @@ class TrainerInfo: NSObject, NSCoding {
     }
     
     func showAll() {
-        print("name:\t" + "\(name)" + "\n" +
-            "sex:\t\t" + "\(sex)" + "\n" +
+        print("name:\t\t" + "\(name)" + "\n" +
+            "sex:\t\t\t" + "\(sex)" + "\n" +
             "birthDay:\t" + "\(birthDay)" + "\n" +
-            "height:\t" + "\(height)" + "\n" +
-            "weight:\t" + "\(weight)" + "\n" +
-            "bodyFat:\t" + "\(bodyFat)" + "\n" +
-            "today:\t" + "\(today)")
+            "height:\t\t" + "\(height)" + "\n" +
+            "weight:\t\t" + "\(weight)" + "\n" +
+            "bodyFat:\t\t" + "\(bodyFat)" + "\n" +
+            "today:\t\t" + "\(today)")
     }
 }
