@@ -131,7 +131,6 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         }
         
         combinedChartView.chartDescription?.text = "\(sender.titleForSegment(at: sender.selectedSegmentIndex)!)"
-        combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
     }
     
     //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
@@ -168,19 +167,22 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
 
         let chartData = CombinedChartData()
         
+        chartData.lineData = LineChartData(dataSets: [bLineChartSet])
+        
         if chartType == "line" && dateList.count > 20{
             chartData.scatterData = ScatterChartData(dataSets: [wLineChartSet])
             wLineChartSet.scatterShapeSize = 6
             bLineChartSet.drawCirclesEnabled = false
             bLineChartSet.lineWidth = 5
+            combinedChartView.animate(xAxisDuration: 1.0)
         }
         else {
             chartData.barData = BarChartData(dataSets: [barChartSet])
             bLineChartSet.circleHoleRadius = 2
             bLineChartSet.circleRadius = 5
             bLineChartSet.lineWidth = 3
+            combinedChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
         }
-        chartData.lineData = LineChartData(dataSets: [bLineChartSet])
         
         //set xAxis offset
         combinedChartView.xAxis.axisMinimum = -0.5;

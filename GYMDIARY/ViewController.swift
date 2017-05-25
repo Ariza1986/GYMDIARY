@@ -40,7 +40,7 @@ class ViewController: UIViewController{
             trainerName.textColor = UIColor.red
         }
         
-        formatter.dateFormat = "YYYY-MM-dd hh:mm"
+        formatter.dateFormat = "YYYY-MM-dd"
         let today = formatter.string(from: info.today)
         
         DispatchQueue.main.async {
