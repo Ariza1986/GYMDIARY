@@ -307,14 +307,14 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             info.showAll()
             
             //db writeData
-            dbWriteData()
+            writeDairyRecord()
             
             self.performSegue(withIdentifier: "newTrainerInfoBackToMainView", sender: self)
         }
     }
     
     //⬇︎⬇︎--------RLM_DB----------⬇︎⬇︎
-    func dbWriteData() {
+    func writeDairyRecord() {
         let realm = try! Realm()
         let dairyRecord = RLM_DairyRecord()
         

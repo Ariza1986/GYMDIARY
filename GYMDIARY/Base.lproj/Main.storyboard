@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -20,11 +20,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AKL-vy-Jih">
-                                <rect key="frame" x="137" y="291" width="101" height="85"/>
+                                <rect key="frame" x="109.5" y="241.5" width="101" height="85"/>
                                 <color key="backgroundColor" red="0.38662353030000002" green="1" blue="0.95071106120000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="85" id="a9n-Qz-3bA"/>
@@ -37,7 +37,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Main Page" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="tJw-zK-Xyh">
-                                <rect key="frame" x="219" y="613" width="130" height="34"/>
+                                <rect key="frame" x="164" y="514" width="130" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -70,11 +70,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Qdg-bd-S7I"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="PQb-KQ-5cP">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scale" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="22" translatesAutoresizingMaskIntoConstraints="NO" id="vFU-54-qEA">
-                                <rect key="frame" x="151.5" y="79" width="72" height="35"/>
+                                <rect key="frame" x="124" y="79" width="72" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="f0z-ib-CmB"/>
                                 </constraints>
@@ -83,7 +83,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="0fL-XI-gdz">
-                                <rect key="frame" x="34" y="148" width="307" height="75"/>
+                                <rect key="frame" x="6.5" y="132" width="307" height="75"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="bZ4-yj-BwR">
                                         <rect key="frame" x="0.0" y="0.0" width="150" height="75"/>
@@ -130,7 +130,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="GJt-bu-Mjy">
-                                <rect key="frame" x="83" y="612" width="209" height="35"/>
+                                <rect key="frame" x="55.5" y="513" width="209" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="btl-ij-nPj">
                                         <rect key="frame" x="0.0" y="0.0" width="80" height="35"/>
@@ -167,15 +167,27 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WsA-5w-Qh9" customClass="CombinedChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="278" width="375" height="246"/>
+                                <rect key="frame" x="0.0" y="255" width="320" height="207"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="WsA-5w-Qh9" secondAttribute="height" multiplier="125:88" constant="26.215909090909122" id="mYC-vh-a4Y">
-                                        <variation key="heightClass=compact-widthClass=compact" constant="141.21591186523438"/>
-                                        <variation key="heightClass=compact-widthClass=regular" constant="164.21591186523438"/>
+                                        <variation key="heightClass=compact-widthClass=compact" constant="189.21591186523438"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="207.21591186523438"/>
                                     </constraint>
                                 </constraints>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SqW-4a-dE7">
+                                <rect key="frame" x="14.5" y="225" width="291" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="DPW-mV-2fr"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="1 Year"/>
+                                    <segment title="6 Months"/>
+                                    <segment title="3 months"/>
+                                    <segment title="week"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="0.87133253099999997" green="1" blue="0.98758375509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -184,19 +196,22 @@
                                 <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                             </constraint>
                             <constraint firstItem="vFU-54-qEA" firstAttribute="top" secondItem="Fn2-Vu-l4Q" secondAttribute="bottom" constant="59" id="8hl-ql-iFt"/>
+                            <constraint firstItem="WsA-5w-Qh9" firstAttribute="top" secondItem="SqW-4a-dE7" secondAttribute="bottom" constant="2" id="Adv-Zo-SNu"/>
                             <constraint firstItem="WsA-5w-Qh9" firstAttribute="centerX" secondItem="PQb-KQ-5cP" secondAttribute="centerX" id="F88-ca-rEJ"/>
                             <constraint firstItem="GJt-bu-Mjy" firstAttribute="centerX" secondItem="PQb-KQ-5cP" secondAttribute="centerX" id="LUg-eo-m5D"/>
-                            <constraint firstItem="WsA-5w-Qh9" firstAttribute="centerY" secondItem="PQb-KQ-5cP" secondAttribute="centerY" constant="67.5" id="U1o-ku-HZB">
-                                <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
-                                <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
+                            <constraint firstItem="SqW-4a-dE7" firstAttribute="centerX" secondItem="PQb-KQ-5cP" secondAttribute="centerX" id="Sno-wl-bRS"/>
+                            <constraint firstItem="WsA-5w-Qh9" firstAttribute="centerY" secondItem="PQb-KQ-5cP" secondAttribute="centerY" constant="74.5" id="U1o-ku-HZB">
+                                <variation key="heightClass=compact-widthClass=compact" constant="15"/>
+                                <variation key="heightClass=compact-widthClass=regular" constant="14"/>
                             </constraint>
                             <constraint firstItem="WsA-5w-Qh9" firstAttribute="leading" secondItem="PQb-KQ-5cP" secondAttribute="leading" id="YAc-sc-GmK"/>
                             <constraint firstItem="0fL-XI-gdz" firstAttribute="centerX" secondItem="PQb-KQ-5cP" secondAttribute="centerX" id="eMf-5n-9Ng"/>
-                            <constraint firstItem="0fL-XI-gdz" firstAttribute="top" secondItem="vFU-54-qEA" secondAttribute="bottom" constant="34" id="xT2-GX-HGy"/>
+                            <constraint firstItem="0fL-XI-gdz" firstAttribute="top" secondItem="vFU-54-qEA" secondAttribute="bottom" constant="18" id="xT2-GX-HGy"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bodyFatTextField" destination="5A1-E0-val" id="oIs-5k-BNN"/>
+                        <outlet property="chartViewSegCtrl" destination="SqW-4a-dE7" id="xQm-kC-4nQ"/>
                         <outlet property="combinedChartView" destination="WsA-5w-Qh9" id="L95-mg-uip"/>
                         <outlet property="weightTextField" destination="Grj-Yi-LtH" id="PW7-Vd-ZBS"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="scaleBackToMainView" modalTransitionStyle="flipHorizontal" id="8eg-sR-dtS"/>
@@ -204,7 +219,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NtS-bT-0iG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-514" y="332"/>
+            <point key="canvasLocation" x="-517.5" y="330.63380281690144"/>
         </scene>
         <!--Trainer Info View Controller-->
         <scene sceneID="fEX-nd-HZy">
@@ -215,11 +230,11 @@
                         <viewControllerLayoutGuide type="bottom" id="eC2-aJ-jXt"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="N5E-Yp-vTn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="elu-HS-XEZ">
-                                <rect key="frame" x="54" y="223.5" width="267" height="220"/>
+                                <rect key="frame" x="26.5" y="174" width="267" height="220"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="bottom" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="VEL-lh-bst">
                                         <rect key="frame" x="0.0" y="0.0" width="110" height="220"/>
@@ -314,7 +329,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Trainer Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="22" translatesAutoresizingMaskIntoConstraints="NO" id="fhi-rv-mWT">
-                                <rect key="frame" x="81.5" y="100" width="211.5" height="35"/>
+                                <rect key="frame" x="54" y="100" width="211.5" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="sBM-UM-pSg"/>
                                 </constraints>
@@ -323,7 +338,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xOt-BM-xes">
-                                <rect key="frame" x="147" y="552" width="80" height="35"/>
+                                <rect key="frame" x="119.5" y="453" width="80" height="35"/>
                                 <color key="backgroundColor" red="0.084081478416919708" green="0.51261365413665771" blue="0.77023059129714966" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Qwi-ev-xiJ"/>

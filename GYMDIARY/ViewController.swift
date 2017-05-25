@@ -55,10 +55,10 @@ class ViewController: UIViewController{
         myUserDefaults.removeObject(forKey: "info")
         myUserDefaults.synchronize()
         
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
+        //let realm = try! Realm()
+        //try! realm.write {
+        //    realm.deleteAll()
+        //}
         
         trainerName.text = "尚未儲存資訊"
         trainerName.textColor = UIColor.red

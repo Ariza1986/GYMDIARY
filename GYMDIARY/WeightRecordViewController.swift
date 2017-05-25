@@ -15,6 +15,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     @IBOutlet weak var weightTextField: UITextField!
     @IBOutlet weak var bodyFatTextField: UITextField!
     @IBOutlet weak var combinedChartView: CombinedChartView!
+    @IBOutlet weak var chartViewSegCtrl: UISegmentedControl!
 
     let weightPicker = UIPickerView()
     let bodyfatPicker = UIPickerView()
@@ -94,12 +95,13 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         combinedChartView.chartDescription?.text = "3 months"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
+        getChartDataList()
+        setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
+    
         //dateList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"]
         //weightValueList = [90.6, 85.1, 80.8, 73.0, 71.8, 74.0, 0.0, 74.3, 73.8, 74.8, 75.7, 75.9, 76.0]
         //bodyFatValueList = [35.3, 27.1, 0.0, 19.3, 15.5, 13.4, 13.9, 13.5, 13.4, 12.4, 11.2, 10.8, 10.5]
-        
-        getChartDataList()
-        setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
+        //setChart(dateList: dateList, weightValueList: weightValueList, bodyFatValueList: bodyFatValueList)
     }
     
     //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
@@ -310,6 +312,22 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         
         //navigationController?.popViewController(animated: true)
         //dismiss(animated: true, completion: nil)
+    }
+    
+    //⬇︎⬇︎--------RLM_DB----------⬇︎⬇︎
+    func writeDairyRecord() {
+        let realm = try! Realm()
+        let dairyRecord = RLM_DairyRecord()
+        
+        dairyRecord.date = NSDate()
+        dairyRecord.weight = info.weight
+        dairyRecord.bodyFat = info.bodyFat
+        
+        try! realm.write {
+            realm.add(dairyRecord)
+            
+            print("DB write success")
+        }
     }
     
     override func didReceiveMemoryWarning() {
