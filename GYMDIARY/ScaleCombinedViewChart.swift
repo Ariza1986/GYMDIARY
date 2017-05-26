@@ -1,8 +1,8 @@
 //
-//  ScaleViewController.swift
+//  scaleCombinedViewChart.swift
 //  GYMDIARY
 //
-//  Created by ArizaKuo on 2017/5/25.
+//  Created by ArizaKuo on 2017/5/26.
 //  Copyright © 2017年 ArizaKuo. All rights reserved.
 //
 
@@ -10,58 +10,35 @@ import UIKit
 import Charts
 import RealmSwift
 
-class ScaleViewController: UIViewController{
-    
-    @IBOutlet weak var combinedChartView: CombinedChartView!
-    @IBOutlet weak var radarChartView: RadarChartView!
-    @IBOutlet weak var chartViewSegCtrl: UISegmentedControl!
+class ScaleCombinedViewChart: CombinedChartView {
     
     //for ChartView
     var dateList: [String]! = []
     var weightValueList: [Double]! = []
     var bodyFatValueList: [Double]! = []
     
-    //for RadarView
-    var subjectList = ["Core", "Back", "Arm", "Aerobic", "Leg", "Chest"]
-    var scoreList = [15.0, 25.0, 20.0, 10.0, 10.0, 20.0]
-    
     //catch date YYYYMMdd
     let today = Date()
     let formatter = DateFormatter()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+     convenience init() {
+     
+        self.init()
         
         //⬇︎⬇︎--------DefaultValue---------⬇︎⬇︎
         //catch date YYYYMMdd
         formatter.dateFormat = "MM/dd"
         
         //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
-        combinedChartView.backgroundColor = UIColor.white
-        combinedChartView.xAxis.labelPosition = .bottom
-        combinedChartView.chartDescription?.text = "week"
-        combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        self.backgroundColor = UIColor.white
+        self.xAxis.labelPosition = .bottom
+        self.chartDescription?.text = "week"
+        self.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
         
         getChartDataList(before: "week")
         setChart(chartType: "bar")
-        
-        //⬇︎⬇︎----------RadarView----------⬇︎⬇︎
-        radarChartView.layer.zPosition = 1
-        radarChartView.backgroundColor = UIColor.white
-        //radarChartView.sizeToFit()
-        //radarChartView.yAxis.labelCount = 5
-        radarChartView.yAxis.axisMinimum = 0.0
-        radarChartView.chartDescription?.text = "Workout Analysis"
-        radarChartView.legend.enabled = false
-        radarChartView.yAxis.gridAntialiasEnabled = true
-        radarChartView.animate(yAxisDuration: 0.5)
-        
-        setRadar()
-        
-        //⬇︎⬇︎--------Segmented Ctrl-------⬇︎⬇︎
-        chartViewSegCtrl.addTarget(self,action: #selector(onChange),for: .valueChanged)
-        
     }
+    
     
     //⬇︎⬇︎------------Segmented Ctrl-----------⬇︎⬇︎
     func onChange(sender: UISegmentedControl) {
@@ -86,33 +63,12 @@ class ScaleViewController: UIViewController{
             break
         }
         
-        combinedChartView.chartDescription?.text = "\(sender.titleForSegment(at: sender.selectedSegmentIndex)!)"
-    }
-    
-    //⬇︎⬇︎-------------RadarView---------------⬇︎⬇︎
-    func setRadar() {
-        //DataEntry -> DataEntries -> DataSet -> ChartData
-        var radarDataEntries: [RadarChartDataEntry] = []
-        
-        for index in 0..<subjectList.count {
-            let dataEntry = RadarChartDataEntry(value: scoreList[index])
-            radarDataEntries.append(dataEntry)
-        }
-        
-        let chartDataSet = RadarChartDataSet(values: radarDataEntries, label: "")
-        let chartData = RadarChartData(dataSet: chartDataSet)
-        radarChartView.data = chartData
-        
-        chartDataSet.drawFilledEnabled = true
-        
-        //set xAxis label
-        radarChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:subjectList)
-
+        self.chartDescription?.text = "\(sender.titleForSegment(at: sender.selectedSegmentIndex)!)"
     }
     
     //⬇︎⬇︎-------------ChartView---------------⬇︎⬇︎
     func setChart(chartType: String) {
-        combinedChartView.noDataText = "You need to provide data for the chart."
+        self.noDataText = "You need to provide data for the chart."
         
         //DataEntry -> DataEntries -> DataSet -> ChartData
         var barDataEntries: [BarChartDataEntry] = []
@@ -151,23 +107,23 @@ class ScaleViewController: UIViewController{
             wLineChartSet.scatterShapeSize = 6
             bLineChartSet.drawCirclesEnabled = false
             bLineChartSet.lineWidth = 5
-            combinedChartView.animate(xAxisDuration: 1.0)
+            self.animate(xAxisDuration: 1.0)
         }
         else {
             chartData.barData = BarChartData(dataSets: [barChartSet])
             bLineChartSet.circleHoleRadius = 2
             bLineChartSet.circleRadius = 5
             bLineChartSet.lineWidth = 3
-            combinedChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
+            self.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
         }
         
         //set xAxis offset
-        combinedChartView.xAxis.axisMinimum = -0.5;
-        combinedChartView.xAxis.axisMaximum = Double(dateList.count) - 0.5;
+        self.xAxis.axisMinimum = -0.5;
+        self.xAxis.axisMaximum = Double(dateList.count) - 0.5;
         //set xAxis label
-        combinedChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:dateList)
+        self.xAxis.valueFormatter = IndexAxisValueFormatter(values:dateList)
         //set ChartView data
-        combinedChartView.data = chartData
+        self.data = chartData
     }
     
     //⬇︎⬇︎----------GetChartDataList-----------⬇︎⬇︎
@@ -204,10 +160,8 @@ class ScaleViewController: UIViewController{
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
 }
 

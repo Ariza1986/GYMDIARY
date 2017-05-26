@@ -60,7 +60,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="89" y="-538"/>
+            <point key="canvasLocation" x="88" y="-570"/>
         </scene>
         <!--Scale View Controller-->
         <scene sceneID="6qw-9I-YXp">
@@ -75,18 +75,39 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g8h-Ay-1hR" customClass="RadarChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="260.5" width="319" height="258.5"/>
+                                <rect key="frame" x="0.0" y="262" width="320" height="257"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="g8h-Ay-1hR" secondAttribute="height" multiplier="125:103" constant="5.6796116504854695" id="1QM-BQ-KQf"/>
+                                    <constraint firstAttribute="width" secondItem="g8h-Ay-1hR" secondAttribute="height" multiplier="320:257" id="2CA-mq-MQY">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="301"/>
+                                        <variation key="heightClass=compact-widthClass=regular" constant="321"/>
+                                    </constraint>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMc-4d-r4D" customClass="CombinedChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="49.5" width="320" height="167.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="FMc-4d-r4D" secondAttribute="height" multiplier="320:179" constant="21.452513966480467" id="izI-4s-pYN"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workout Analysis:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKp-Ce-w1D">
+                                <rect key="frame" x="15" y="231" width="290" height="29"/>
+                                <color key="backgroundColor" red="0.084081478419999994" green="0.51261365410000004" blue="0.77023059130000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="QLG-kC-M4L"/>
+                                    <constraint firstAttribute="width" constant="290" id="iYo-qM-s7a"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bGl-bo-bvf">
-                                <rect key="frame" x="14.5" y="20" width="291" height="29"/>
+                                <rect key="frame" x="15" y="19.5" width="290" height="29"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="2dl-dd-fBh"/>
-                                    <constraint firstAttribute="width" constant="291" id="Mxp-Ub-fHw"/>
+                                    <constraint firstAttribute="width" constant="290" id="1AT-cg-bm8"/>
+                                    <constraint firstAttribute="height" constant="28" id="5Le-RD-u0I"/>
                                 </constraints>
                                 <segments>
                                     <segment title="Week"/>
@@ -96,40 +117,33 @@
                                 </segments>
                                 <color key="tintColor" red="0.084081478419999994" green="0.51261365410000004" blue="0.77023059130000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </segmentedControl>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMc-4d-r4D" customClass="CombinedChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="48" width="319" height="179"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="FMc-4d-r4D" secondAttribute="height" multiplier="375:217" constant="9.668202764976968" id="IZN-qp-C91"/>
-                                </constraints>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workout Analysis" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKp-Ce-w1D">
-                                <rect key="frame" x="5.5" y="229.5" width="309" height="28"/>
-                                <color key="backgroundColor" red="0.084081478419999994" green="0.51261365410000004" blue="0.77023059130000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="8et-dH-wkl"/>
-                                    <constraint firstAttribute="width" constant="309" id="8zQ-HN-9E4"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.87133253099999997" green="1" blue="0.98758375509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="FMc-4d-r4D" firstAttribute="centerX" secondItem="bGl-bo-bvf" secondAttribute="centerX" id="0bf-gh-I7u"/>
-                            <constraint firstItem="bGl-bo-bvf" firstAttribute="centerX" secondItem="PlG-Vb-EmY" secondAttribute="centerX" id="JN0-6C-bCh"/>
-                            <constraint firstItem="FMc-4d-r4D" firstAttribute="leading" secondItem="PlG-Vb-EmY" secondAttribute="leading" id="enk-UH-FNt"/>
-                            <constraint firstItem="FMc-4d-r4D" firstAttribute="leading" secondItem="g8h-Ay-1hR" secondAttribute="leading" id="f0y-5A-Qtk"/>
-                            <constraint firstItem="bKp-Ce-w1D" firstAttribute="centerX" secondItem="FMc-4d-r4D" secondAttribute="centerX" id="mby-a2-7nj"/>
-                            <constraint firstItem="bGl-bo-bvf" firstAttribute="top" secondItem="GQx-ae-hu5" secondAttribute="bottom" id="pDO-PD-enY"/>
-                            <constraint firstItem="FMc-4d-r4D" firstAttribute="trailing" secondItem="g8h-Ay-1hR" secondAttribute="trailing" id="qXC-8x-LHf"/>
-                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="top" secondItem="bKp-Ce-w1D" secondAttribute="bottom" constant="2.5" id="rb0-Zk-38T"/>
-                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="bottom" secondItem="kbp-Dz-Xyc" secondAttribute="top" id="sjR-1E-Kgi"/>
-                            <constraint firstItem="FMc-4d-r4D" firstAttribute="top" secondItem="bGl-bo-bvf" secondAttribute="bottom" id="tdI-XP-fzQ"/>
+                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="leading" secondItem="PlG-Vb-EmY" secondAttribute="leading" id="2ld-q0-Qw5"/>
+                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="centerX" secondItem="PlG-Vb-EmY" secondAttribute="centerX" id="2qU-bc-z96"/>
+                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="leading" secondItem="FMc-4d-r4D" secondAttribute="leading" id="D77-bX-sZV"/>
+                            <constraint firstItem="kbp-Dz-Xyc" firstAttribute="top" secondItem="g8h-Ay-1hR" secondAttribute="bottom" id="OfC-EI-AeJ">
+                                <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="bKp-Ce-w1D" firstAttribute="top" secondItem="FMc-4d-r4D" secondAttribute="bottom" constant="14" id="cao-MH-ezE">
+                                <variation key="heightClass=compact-widthClass=compact" constant="46"/>
+                            </constraint>
+                            <constraint firstItem="bKp-Ce-w1D" firstAttribute="centerX" secondItem="PlG-Vb-EmY" secondAttribute="centerX" id="dfr-cG-Xch"/>
+                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="top" secondItem="bKp-Ce-w1D" secondAttribute="bottom" constant="2" id="hmn-rf-s1p">
+                                <variation key="heightClass=compact-widthClass=compact" constant="2"/>
+                            </constraint>
+                            <constraint firstItem="g8h-Ay-1hR" firstAttribute="trailing" secondItem="FMc-4d-r4D" secondAttribute="trailing" id="i0b-Nq-ocB"/>
+                            <constraint firstItem="FMc-4d-r4D" firstAttribute="top" secondItem="bGl-bo-bvf" secondAttribute="bottom" constant="2" id="j4z-OO-KNd"/>
+                            <constraint firstItem="bGl-bo-bvf" firstAttribute="centerX" secondItem="PlG-Vb-EmY" secondAttribute="centerX" id="um3-oO-laI"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="mostViewed" id="sJi-Ec-Wxx"/>
+                    <connections>
+                        <outlet property="chartViewSegCtrl" destination="bGl-bo-bvf" id="XDm-lf-QAk"/>
+                        <outlet property="combinedChartView" destination="FMc-4d-r4D" id="kJc-fM-iQ6"/>
+                        <outlet property="radarChartView" destination="g8h-Ay-1hR" id="SOC-oH-isf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4l-Xf-UI8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -465,6 +479,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="OId-lF-xn7" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="VZ6-9x-Z3g">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
@@ -479,6 +494,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="8eg-sR-dtS"/>
+        <segue reference="8gn-cq-Zc5"/>
     </inferredMetricsTieBreakers>
 </document>
