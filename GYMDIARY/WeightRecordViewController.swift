@@ -90,7 +90,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
         }
         
         //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
-        combinedChartView.backgroundColor = UIColor.white
+        //combinedChartView.backgroundColor = UIColor.white
         combinedChartView.xAxis.labelPosition = .bottom
         combinedChartView.chartDescription?.text = "week"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)

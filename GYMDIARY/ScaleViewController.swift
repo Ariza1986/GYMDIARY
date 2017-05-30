@@ -37,7 +37,7 @@ class ScaleViewController: UIViewController{
         formatter.dateFormat = "MM/dd"
         
         //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
-        combinedChartView.backgroundColor = UIColor.white
+        //combinedChartView.backgroundColor = UIColor.white
         combinedChartView.xAxis.labelPosition = .bottom
         combinedChartView.chartDescription?.text = "week"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
@@ -46,9 +46,9 @@ class ScaleViewController: UIViewController{
         setChart(chartType: "bar")
         
         //⬇︎⬇︎----------RadarView----------⬇︎⬇︎
-        radarChartView.layer.zPosition = 1
-        radarChartView.backgroundColor = UIColor.white
-        //radarChartView.sizeToFit()
+        //radarChartView.layer.zPosition = 1
+        //radarChartView.backgroundColor = UIColor.white
+        radarChartView.sizeToFit()
         //radarChartView.yAxis.labelCount = 5
         radarChartView.yAxis.axisMinimum = 0.0
         radarChartView.chartDescription?.text = "Workout Analysis"
