@@ -13,6 +13,7 @@
 		EF33581F1ECD71FF0098817B /* GYMDIATY_launchscreen in Resources */ = {isa = PBXBuildFile; fileRef = EF33581E1ECD71FF0098817B /* GYMDIATY_launchscreen */; };
 		EF3358211ECD83820098817B /* TrainerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3358201ECD83820098817B /* TrainerInfoViewController.swift */; };
 		EF3358231ECE0CFB0098817B /* WeightRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */; };
+		EF9B31EB1EE06ECA0072EE42 /* WeatherTableVIewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9B31EA1EE06ECA0072EE42 /* WeatherTableVIewCell.swift */; };
 		EFBC89EF1ED88B38003B5871 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBC89EE1ED88B38003B5871 /* WeatherViewController.swift */; };
 		EFC69E7D1ED734D700A02520 /* ScaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC69E7C1ED734D700A02520 /* ScaleViewController.swift */; };
 		EFED14121EB8AA7500ECF63B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED14111EB8AA7500ECF63B /* AppDelegate.swift */; };
@@ -56,6 +57,7 @@
 		EF33581E1ECD71FF0098817B /* GYMDIATY_launchscreen */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GYMDIATY_launchscreen; sourceTree = "<group>"; };
 		EF3358201ECD83820098817B /* TrainerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainerInfoViewController.swift; sourceTree = "<group>"; };
 		EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeightRecordViewController.swift; sourceTree = "<group>"; };
+		EF9B31EA1EE06ECA0072EE42 /* WeatherTableVIewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherTableVIewCell.swift; sourceTree = "<group>"; };
 		EFA197FBC376D8E4D3DA323D /* Pods_GYMDIARY.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GYMDIARY.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFBC89EE1ED88B38003B5871 /* WeatherViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		EFC69E7C1ED734D700A02520 /* ScaleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */,
 				EFC69E7C1ED734D700A02520 /* ScaleViewController.swift */,
 				EFBC89EE1ED88B38003B5871 /* WeatherViewController.swift */,
+				EF9B31EA1EE06ECA0072EE42 /* WeatherTableVIewCell.swift */,
 				EFED14151EB8AA7500ECF63B /* Main.storyboard */,
 				EFED14181EB8AA7500ECF63B /* Assets.xcassets */,
 				EFED141A1EB8AA7500ECF63B /* LaunchScreen.storyboard */,
@@ -476,6 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF9B31EB1EE06ECA0072EE42 /* WeatherTableVIewCell.swift in Sources */,
 				EFED14141EB8AA7500ECF63B /* ViewController.swift in Sources */,
 				EF3358211ECD83820098817B /* TrainerInfoViewController.swift in Sources */,
 				EF3358231ECE0CFB0098817B /* WeightRecordViewController.swift in Sources */,

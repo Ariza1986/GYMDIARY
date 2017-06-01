@@ -62,17 +62,13 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "forecastCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WeatherTableVIewCell
         
         var day = forecastList[indexPath.row].day
         if indexPath.row == 0 {
             day = "Today"
         }
-            
-        cell.textLabel?.text =  day + "\t" +
-                                temptranstion(temp: Double(forecastList[indexPath.row].high)!) + "°\t" +
-                                temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°"
-        
+
         var image = ""
         switch Int(forecastList[indexPath.row].code)! {
         case 32, 34, 36:
@@ -100,7 +96,13 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         default:
             image = "sunny=40x40.png"
         }
-        cell.imageView?.image = UIImage(named: image)
+        
+        cell.dayLabel.text = day
+        cell.dateLabel.text = forecastList[indexPath.row].date
+        cell.conditionImage.image = UIImage(named: image)
+        cell.conditionImage.clipsToBounds = true
+        cell.highLabel.text = temptranstion(temp: Double(forecastList[indexPath.row].high)!) + "°"
+        cell.lowLabel.text = temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°"
         
         return cell
     }
@@ -116,7 +118,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
         }
-        forecastList.removeAll()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -127,9 +128,9 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
-        manager.stopUpdatingLocation()
+        //manager.stopUpdatingLocation()
         
-        clGeocoder.reverseGeocodeLocation(locationManager.location!, completionHandler: { (placemarks, error) -> Void in
+        clGeocoder.reverseGeocodeLocation(manager.location!, completionHandler: { (placemarks, error) -> Void in
             // Place details
             var placeMark: CLPlacemark!
             placeMark = placemarks?[0]
@@ -138,12 +139,17 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
             if let city = placeMark.addressDictionary!["City"] as? String, let countryCode = placeMark.addressDictionary!["CountryCode"] as? String{
                 self.getWeatherInfo(city: city, countryCode: countryCode)
             }
+            //self.locationManager.stopUpdatingLocation()
         })
     }
     
     //⬇︎⬇︎--------requestWeatherAPI---------⬇︎⬇︎
     func getWeatherInfo (city: String, countryCode: String) {
 
+        if forecastList.count != 0 {
+            forecastList.removeAll()
+        }
+        
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
