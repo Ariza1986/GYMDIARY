@@ -11,17 +11,39 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate{
+struct DayForecast {
+    var code:String
+    var date:String
+    var day:String
+    var high:String
+    var low:String
+    var text:String
+    
+    init(code: String, date: String, day: String, high: String, low: String, text: String) {
+        self.code = code
+        self.date = date
+        self.day = day
+        self.high = high
+        self.low = low
+        self.text = text
+    }
+}
 
+class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate{
+
+    @IBOutlet weak var weahterImageView: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var countryCodeLabel: UILabel!
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var sunsetLabel: UILabel!
+    @IBOutlet weak var tempLabel: UILabel!
+    @IBOutlet weak var conditionLabel: UILabel!
+    @IBOutlet weak var forecastTable: UITableView!
+
     
     let locationManager = CLLocationManager()
     let clGeocoder = CLGeocoder()
     
-    var sunset = ""
+    var forecastList = [DayForecast]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +52,22 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate{
         locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("countcountcount" + "\(forecastList.count)")
+        return forecastList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellIdentifier = "forecastCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        
+        cell.textLabel?.text = forecastList[indexPath.row].day + "\t" +
+                                temptranstion(temp: Double(forecastList[indexPath.row].high)!) + "°\t" +
+                                temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°\t" +
+                                forecastList[indexPath.row].text
+        return cell
     }
     
     //⬇︎⬇︎--------requestWhenInUseAuthorization---------⬇︎⬇︎
@@ -43,6 +81,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate{
         else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
         }
+        forecastList.removeAll()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -63,12 +102,12 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate{
             //print(placeMark.addressDictionary!, terminator: "")
             if let city = placeMark.addressDictionary!["City"] as? String, let countryCode = placeMark.addressDictionary!["CountryCode"] as? String{
                 self.cityLabel.text = city
-                self.countryCodeLabel.text = countryCode
                 self.getWeatherInfo(city: city, countryCode: countryCode)
             }
         })
     }
     
+    //⬇︎⬇︎--------requestWeatherAPI---------⬇︎⬇︎
     func getWeatherInfo (city: String, countryCode: String) {
 
         let sessionConfig = URLSessionConfiguration.default
@@ -94,18 +133,51 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate{
                     let query = json["query"] as? [String: Any],
                     let results = query["results"] as? [String: Any],
                     let channel = results["channel"] as? [String: Any] {
+                    
                         if  let astronomy = channel["astronomy"] as? [String: Any],
                             let sunrise = astronomy["sunrise"] as? String,
                             let sunset = astronomy["sunset"] as? String {
-                            print(sunrise)
-                            self.sunriseLabel.text = sunrise
-                            self.sunset = sunset
+                            
+                            OperationQueue.main.addOperation {
+                                self.sunriseLabel.text = sunrise
+                                self.sunsetLabel.text = sunset
+                            }
                         }
                     
-                        if let items = channel["item"] as? [String: Any] {
-                            print(items)
+                        if  let items = channel["item"] as? [String: Any] {
+                            
+                            if  let condition = items["condition"] as? [String: Any],
+                                let temp = condition["temp"] as? String,
+                                let text = condition["text"] as? String {
+                                
+                                    OperationQueue.main.addOperation {
+                                        self.tempLabel.text = self.temptranstion(temp: Double(temp)!) + "°C"
+                                        self.conditionLabel.text = text
+                                    }
+                                }
+                            
+                            if  let forecasts = items["forecast"] as? NSArray {
+                                for forecast in forecasts {
+                                    if  let detail = forecast as? NSDictionary,
+                                        let code = detail["code"] as? String,
+                                        let date = detail["date"] as? String,
+                                        let day = detail["day"] as? String,
+                                        let high = detail["high"] as? String,
+                                        let low = detail["low"] as? String,
+                                        let text = detail["text"] as? String {
+                                        
+                                        OperationQueue.main.addOperation {
+                                            let dayforecast = DayForecast(code: code, date: date, day: day, high: high, low: low, text: text)
+                                            self.forecastList.append(dayforecast)
+                                        }
+                                    }
+                                }
+                                OperationQueue.main.addOperation {
+                                    self.forecastTable.reloadData()
+                                }
+                            }
                         }
-                    }
+                }
             }
             catch {
                     print("Error deserializing JSON: \(error)")
@@ -117,6 +189,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate{
             }
         })
         task.resume()
+    }
+    
+    func temptranstion(temp: Double) -> String {
+        
+        return String(Int((temp - 32) * 5 / 9))
     }
     
     override func didReceiveMemoryWarning() {
