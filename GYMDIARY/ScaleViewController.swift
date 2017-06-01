@@ -41,6 +41,7 @@ class ScaleViewController: UIViewController{
         combinedChartView.xAxis.labelPosition = .bottom
         combinedChartView.chartDescription?.text = "week"
         combinedChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        combinedChartView.setScaleEnabled(false)
         
         getChartDataList(before: "week")
         setChart(chartType: "bar")

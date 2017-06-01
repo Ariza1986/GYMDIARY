@@ -31,7 +31,7 @@ struct DayForecast {
 
 class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate{
 
-    @IBOutlet weak var weahterImageView: UIImageView!
+    @IBOutlet weak var skyImageView: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var sunsetLabel: UILabel!
@@ -52,10 +52,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         
+        forecastTable.allowsSelection = false
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("countcountcount" + "\(forecastList.count)")
         return forecastList.count
     }
     
@@ -63,10 +64,44 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         let cellIdentifier = "forecastCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
-        cell.textLabel?.text = forecastList[indexPath.row].day + "\t" +
+        var day = forecastList[indexPath.row].day
+        if indexPath.row == 0 {
+            day = "Today"
+        }
+            
+        cell.textLabel?.text =  day + "\t" +
                                 temptranstion(temp: Double(forecastList[indexPath.row].high)!) + "°\t" +
-                                temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°\t" +
-                                forecastList[indexPath.row].text
+                                temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°"
+        
+        var image = ""
+        switch Int(forecastList[indexPath.row].code)! {
+        case 32, 34, 36:
+            image = "sunny-40x40"
+        case 31:
+            image = "clear-40x40"
+        case 26:
+            image = "cloudy-40x40.png"
+        case 19, 20, 21, 22, 28, 30, 44:
+            image = "mostly cloudy-40x40"
+        case 27, 29:
+            image = "cloudy-night-40x40"
+        case 9, 10, 11, 12:
+            image = "drizzle-40x40"
+        case 0, 1, 2, 3, 4:
+            image = "thunderstorms-40x40.png"
+        case 37, 38, 39, 40, 45, 47:
+            image = "scattered thunderstorms-40x40"
+        case 23, 24, 25:
+            image = "windy-40x40"
+        case 33:
+            image = "fair-night-40x40"
+        case 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 35, 41, 42, 43, 46:
+            image = "snow-40x30.png"
+        default:
+            image = "sunny=40x40.png"
+        }
+        cell.imageView?.image = UIImage(named: image)
+        
         return cell
     }
     
@@ -101,7 +136,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
 
             //print(placeMark.addressDictionary!, terminator: "")
             if let city = placeMark.addressDictionary!["City"] as? String, let countryCode = placeMark.addressDictionary!["CountryCode"] as? String{
-                self.cityLabel.text = city
                 self.getWeatherInfo(city: city, countryCode: countryCode)
             }
         })
@@ -132,7 +166,15 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                     let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                     let query = json["query"] as? [String: Any],
                     let results = query["results"] as? [String: Any],
-                    let channel = results["channel"] as? [String: Any] {
+                    let channel = results["channel"] as? [String: Any],
+                    let location = channel["location"] as? [String: Any] {
+                    
+                        if  let city = location["city"] as? String {
+                        
+                            OperationQueue.main.addOperation {
+                                self.cityLabel.text = city
+                            }
+                        }
                     
                         if  let astronomy = channel["astronomy"] as? [String: Any],
                             let sunrise = astronomy["sunrise"] as? String,
@@ -148,13 +190,36 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                             
                             if  let condition = items["condition"] as? [String: Any],
                                 let temp = condition["temp"] as? String,
-                                let text = condition["text"] as? String {
+                                let text = condition["text"] as? String,
+                                let code = condition["code"] as? String {
                                 
-                                    OperationQueue.main.addOperation {
-                                        self.tempLabel.text = self.temptranstion(temp: Double(temp)!) + "°C"
-                                        self.conditionLabel.text = text
-                                    }
+                                var image = ""
+                                switch Int(code)! {
+                                case 32, 34, 36:
+                                    image = "sunnysky-340x275.png"
+                                case 31, 33:
+                                    image = "nightsky-340x275.png"
+                                case 19, 20, 21, 22, 26, 28, 30, 44:
+                                    image = "cloudysky-340x275.png"
+                                case 27, 29:
+                                    image = "cloudynightsky-340x275.png"
+                                case 0, 1, 2, 3, 4, 9, 10, 11, 12, 37, 38, 39, 40, 45, 47:
+                                    image = "rainningsky-340x275.png"
+                                case 23, 24, 25:
+                                    image = "windysky-340x275.png"
+                                case 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 35, 41, 42, 43, 46:
+                                    image = "snowsky-340x275.png"
+                                default:
+                                    image = "sunnysky-340x275.png"
                                 }
+                                print(code)
+                                
+                                OperationQueue.main.addOperation {
+                                    self.tempLabel.text = self.temptranstion(temp: Double(temp)!) + "°"
+                                    self.conditionLabel.text = text
+                                    self.skyImageView?.image = UIImage(named: image)
+                                }
+                            }
                             
                             if  let forecasts = items["forecast"] as? NSArray {
                                 for forecast in forecasts {
