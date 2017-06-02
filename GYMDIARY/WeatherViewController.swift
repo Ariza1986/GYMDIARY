@@ -98,12 +98,12 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         }
         
         cell.dayLabel.text = day
-        cell.dateLabel.text = forecastList[indexPath.row].date
+        cell.dateLabel.text = self.forecastList[indexPath.row].date
         cell.conditionImage.image = UIImage(named: image)
         cell.conditionImage.clipsToBounds = true
-        cell.highLabel.text = temptranstion(temp: Double(forecastList[indexPath.row].high)!) + "°"
-        cell.lowLabel.text = temptranstion(temp: Double(forecastList[indexPath.row].low)!) + "°"
-        
+        cell.highLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].high)!) + "°"
+        cell.lowLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].low)!) + "°"
+
         return cell
     }
     
@@ -163,17 +163,21 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         request.httpMethod = "GET"
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {(data, response, error) -> Void in
-            if let error = error {
-                print(error)
-            }
-            self.sunriseLabel.text = "123"
-            do {
-                if  let data = data,
-                    let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                    let query = json["query"] as? [String: Any],
-                    let results = query["results"] as? [String: Any],
-                    let channel = results["channel"] as? [String: Any],
-                    let location = channel["location"] as? [String: Any] {
+            
+            DispatchQueue.main.async {
+                // Update UI
+            
+                if let error = error {
+                    print(error)
+                }
+                
+                do {
+                    if  let data = data,
+                        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                        let query = json["query"] as? [String: Any],
+                        let results = query["results"] as? [String: Any],
+                        let channel = results["channel"] as? [String: Any],
+                        let location = channel["location"] as? [String: Any] {
                     
                         if  let city = location["city"] as? String {
                         
@@ -193,7 +197,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                         }
                     
                         if  let items = channel["item"] as? [String: Any] {
-                            
+                        
                             if  let condition = items["condition"] as? [String: Any],
                                 let temp = condition["temp"] as? String,
                                 let text = condition["text"] as? String,
@@ -219,7 +223,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                                     image = "sunnysky-340x275.png"
                                 }
                                 print(code)
-                                
+                            
                                 OperationQueue.main.addOperation {
                                     self.tempLabel.text = self.temptranstion(temp: Double(temp)!) + "°"
                                     self.conditionLabel.text = text
@@ -248,15 +252,16 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                                 }
                             }
                         }
+                    }
                 }
-            }
-            catch {
+                catch {
                     print("Error deserializing JSON: \(error)")
-            }
+                }
             
-            if let response = response {
-                let httpResponse = response as! HTTPURLResponse
-                print("response code = \(httpResponse.statusCode)")
+                if let response = response {
+                    let httpResponse = response as! HTTPURLResponse
+                    print("response code = \(httpResponse.statusCode)")
+                }
             }
         })
         task.resume()

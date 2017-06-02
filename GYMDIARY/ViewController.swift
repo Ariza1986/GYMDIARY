@@ -11,8 +11,6 @@ import RealmSwift
 
 class ViewController: UIViewController{
     
-    @IBOutlet weak var trainerName: UILabel!
-    
     var info = TrainerInfo()
     var myUserDefaults = UserDefaults()
     
@@ -28,15 +26,6 @@ class ViewController: UIViewController{
             info = trainerInfo
         } else {
             print("show new trainer info view")
-        }
-
-        if info.name != "" { //go Scale View
-            trainerName.text = info.name
-            //info.showAll()
-        }
-        else {//go New Trainer Info
-            trainerName.text = "尚未儲存資訊"
-            trainerName.textColor = UIColor.red
         }
         
         formatter.dateFormat = "YYYY-MM-dd"
@@ -60,9 +49,7 @@ class ViewController: UIViewController{
         //try! realm.write {
         //    realm.deleteAll()
         //}
-        
-        trainerName.text = "尚未儲存資訊"
-        trainerName.textColor = UIColor.red
+
     }
     
     func typeYourWeight() {
