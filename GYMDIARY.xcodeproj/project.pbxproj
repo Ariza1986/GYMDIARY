@@ -10,6 +10,7 @@
 		21BEE36A2CE5538FB717BE5E /* Pods_GYMDIARYTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1629742A1BB02F91D64240F4 /* Pods_GYMDIARYTests.framework */; };
 		ACE1C325425651B3B12E4F7D /* Pods_GYMDIARY.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFA197FBC376D8E4D3DA323D /* Pods_GYMDIARY.framework */; };
 		EA53B04D17F8989CD20045E0 /* Pods_GYMDIARYUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E21ED026F006EE48E4E9DBE0 /* Pods_GYMDIARYUITests.framework */; };
+		EF1FDDAB1EE15C1600726171 /* WorkoutCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1FDDAA1EE15C1600726171 /* WorkoutCalendarCell.swift */; };
 		EF33581F1ECD71FF0098817B /* GYMDIATY_launchscreen in Resources */ = {isa = PBXBuildFile; fileRef = EF33581E1ECD71FF0098817B /* GYMDIATY_launchscreen */; };
 		EF3358211ECD83820098817B /* TrainerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3358201ECD83820098817B /* TrainerInfoViewController.swift */; };
 		EF3358231ECE0CFB0098817B /* WeightRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */; };
@@ -54,6 +55,7 @@
 		63184FC7AD2A457D7B8346AE /* Pods-GYMDIARY.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GYMDIARY.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GYMDIARY/Pods-GYMDIARY.debug.xcconfig"; sourceTree = "<group>"; };
 		D4AA568592B0738D14E597D8 /* Pods-GYMDIARYTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GYMDIARYTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GYMDIARYTests/Pods-GYMDIARYTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E21ED026F006EE48E4E9DBE0 /* Pods_GYMDIARYUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GYMDIARYUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1FDDAA1EE15C1600726171 /* WorkoutCalendarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutCalendarCell.swift; sourceTree = "<group>"; };
 		EF33581E1ECD71FF0098817B /* GYMDIATY_launchscreen */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GYMDIATY_launchscreen; sourceTree = "<group>"; };
 		EF3358201ECD83820098817B /* TrainerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainerInfoViewController.swift; sourceTree = "<group>"; };
 		EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeightRecordViewController.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				EFF77DB51ED176E5009CB8DF /* TrainerInfo.swift */,
 				EFED14111EB8AA7500ECF63B /* AppDelegate.swift */,
 				EFED14131EB8AA7500ECF63B /* ViewController.swift */,
+				EF1FDDAA1EE15C1600726171 /* WorkoutCalendarCell.swift */,
 				EF3358201ECD83820098817B /* TrainerInfoViewController.swift */,
 				EF3358221ECE0CFB0098817B /* WeightRecordViewController.swift */,
 				EFC69E7C1ED734D700A02520 /* ScaleViewController.swift */,
@@ -482,6 +485,7 @@
 				EF9B31EB1EE06ECA0072EE42 /* WeatherTableVIewCell.swift in Sources */,
 				EFED14141EB8AA7500ECF63B /* ViewController.swift in Sources */,
 				EF3358211ECD83820098817B /* TrainerInfoViewController.swift in Sources */,
+				EF1FDDAB1EE15C1600726171 /* WorkoutCalendarCell.swift in Sources */,
 				EF3358231ECE0CFB0098817B /* WeightRecordViewController.swift in Sources */,
 				EFC69E7D1ED734D700A02520 /* ScaleViewController.swift in Sources */,
 				EFBC89EF1ED88B38003B5871 /* WeatherViewController.swift in Sources */,

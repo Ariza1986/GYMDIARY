@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JTAppleCalendar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-GYMDIARY.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,6 +47,11 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>37221B488CDDA01C2CA05489C4C2EE2F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>4BFA3BEA3CFB37DA5C2CECF5652C1CEA</key>
 		<dict>
 			<key>primary</key>
@@ -53,6 +63,21 @@
 			<true/>
 		</dict>
 		<key>72ABC40A0C82D0B70B9597A58F3D07A6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BFED2E29E95E065400F8846E0231A970</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CDA417049F3948C3D96DE3E4594AB551</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DC7655C706BC3E3F7787FB1ACD6B2CEE</key>
 		<dict>
 			<key>primary</key>
 			<true/>

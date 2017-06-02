@@ -35,6 +35,8 @@ class ScaleViewController: UIViewController{
         //⬇︎⬇︎--------DefaultValue---------⬇︎⬇︎
         //catch date YYYYMMdd
         formatter.dateFormat = "MM/dd"
+        formatter.timeZone = Calendar.current.timeZone
+        formatter.locale = Calendar.current.locale
         
         //⬇︎⬇︎----------ChartView----------⬇︎⬇︎
         //combinedChartView.backgroundColor = UIColor.white

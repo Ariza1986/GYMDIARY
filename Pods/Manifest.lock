@@ -2,6 +2,7 @@ PODS:
   - Charts (3.0.2):
     - Charts/Core (= 3.0.2)
   - Charts/Core (3.0.2)
+  - JTAppleCalendar (7.0.2)
   - Realm (2.7.0):
     - Realm/Headers (= 2.7.0)
   - Realm/Headers (2.7.0)
@@ -10,6 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - Charts (from `https://github.com/danielgindi/Charts.git`, branch `master`)
+  - JTAppleCalendar (~> 7.0)
   - RealmSwift (~> 2.7.0)
 
 EXTERNAL SOURCES:
@@ -24,9 +26,10 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Charts: e955b9a241a14a8971d70143002c8ab1610d26b6
+  JTAppleCalendar: c14685634064ef67a68209548ff3443208af48a3
   Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
   RealmSwift: 6d06425d3900c86473c4f323bf6949b43fca22bc
 
-PODFILE CHECKSUM: 70c6694736be96e12f4f0ef98d1feb604c82ecf7
+PODFILE CHECKSUM: 3a540397c5159b0409e49b08f37fafd01635c060
 
 COCOAPODS: 1.2.1

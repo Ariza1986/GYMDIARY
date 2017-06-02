@@ -56,6 +56,9 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         //⬇︎⬇︎--------DefaultValue---------⬇︎⬇︎
         //catch date YYYYMMdd
         formatter.dateFormat = "YYYY-MM-dd"
+        formatter.timeZone = Calendar.current.timeZone
+        formatter.locale = Calendar.current.locale
+        
         todayStr = formatter.string(from: today)
         
         heightData = (170, 0)

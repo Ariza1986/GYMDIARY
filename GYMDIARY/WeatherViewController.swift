@@ -29,7 +29,7 @@ struct DayForecast {
     }
 }
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate{
+class WeatherViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var skyImageView: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
@@ -39,6 +39,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var forecastTable: UITableView!
 
+    var refreshControl: UIRefreshControl!
     
     let locationManager = CLLocationManager()
     let clGeocoder = CLGeocoder()
@@ -54,59 +55,20 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
         
         forecastTable.allowsSelection = false
         
+        //⬇︎⬇︎--------Refresh Ctrl-------⬇︎⬇︎
+        refreshControl = UIRefreshControl()
+        forecastTable.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Weather Data ...")
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return forecastList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellIdentifier = "forecastCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WeatherTableVIewCell
-        
-        var day = forecastList[indexPath.row].day
-        if indexPath.row == 0 {
-            day = "Today"
+    //⬇︎⬇︎--------Refresh Ctrl-------⬇︎⬇︎
+    func refreshData(sender: UIRefreshControl) {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            locationManager.startUpdatingLocation()
         }
-
-        var image = ""
-        switch Int(forecastList[indexPath.row].code)! {
-        case 32, 34, 36:
-            image = "sunny-40x40"
-        case 31:
-            image = "clear-40x40"
-        case 26:
-            image = "cloudy-40x40.png"
-        case 19, 20, 21, 22, 28, 30, 44:
-            image = "mostly cloudy-40x40"
-        case 27, 29:
-            image = "cloudy-night-40x40"
-        case 9, 10, 11, 12:
-            image = "drizzle-40x40"
-        case 0, 1, 2, 3, 4:
-            image = "thunderstorms-40x40.png"
-        case 37, 38, 39, 40, 45, 47:
-            image = "scattered thunderstorms-40x40"
-        case 23, 24, 25:
-            image = "windy-40x40"
-        case 33:
-            image = "fair-night-40x40"
-        case 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 35, 41, 42, 43, 46:
-            image = "snow-40x30.png"
-        default:
-            image = "sunny=40x40.png"
-        }
-        
-        cell.dayLabel.text = day
-        cell.dateLabel.text = self.forecastList[indexPath.row].date
-        cell.conditionImage.image = UIImage(named: image)
-        cell.conditionImage.clipsToBounds = true
-        cell.highLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].high)!) + "°"
-        cell.lowLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].low)!) + "°"
-
-        return cell
     }
-    
+
     //⬇︎⬇︎--------requestWhenInUseAuthorization---------⬇︎⬇︎
     override func viewDidAppear(_ animated: Bool) {
         if CLLocationManager.authorizationStatus() == .notDetermined {
@@ -128,8 +90,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
-        //manager.stopUpdatingLocation()
-        
         clGeocoder.reverseGeocodeLocation(manager.location!, completionHandler: { (placemarks, error) -> Void in
             // Place details
             var placeMark: CLPlacemark!
@@ -138,18 +98,14 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
             //print(placeMark.addressDictionary!, terminator: "")
             if let city = placeMark.addressDictionary!["City"] as? String, let countryCode = placeMark.addressDictionary!["CountryCode"] as? String{
                 self.getWeatherInfo(city: city, countryCode: countryCode)
+                self.locationManager.stopUpdatingLocation()
             }
-            //self.locationManager.stopUpdatingLocation()
         })
     }
     
     //⬇︎⬇︎--------requestWeatherAPI---------⬇︎⬇︎
     func getWeatherInfo (city: String, countryCode: String) {
 
-        if forecastList.count != 0 {
-            forecastList.removeAll()
-        }
-        
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
@@ -232,6 +188,10 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                             }
                             
                             if  let forecasts = items["forecast"] as? NSArray {
+                                
+                                if self.forecastList.count != 0 {
+                                    self.forecastList.removeAll()
+                                }
                                 for forecast in forecasts {
                                     if  let detail = forecast as? NSDictionary,
                                         let code = detail["code"] as? String,
@@ -241,14 +201,15 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
                                         let low = detail["low"] as? String,
                                         let text = detail["text"] as? String {
                                         
-                                        OperationQueue.main.addOperation {
-                                            let dayforecast = DayForecast(code: code, date: date, day: day, high: high, low: low, text: text)
-                                            self.forecastList.append(dayforecast)
-                                        }
+                                        let dayforecast = DayForecast(code: code, date: date, day: day, high: high, low: low, text: text)
+                                        self.forecastList.append(dayforecast)
                                     }
                                 }
                                 OperationQueue.main.addOperation {
                                     self.forecastTable.reloadData()
+                                    if self.refreshControl.isRefreshing {
+                                        self.refreshControl.endRefreshing()
+                                    }
                                 }
                             }
                         }
@@ -275,5 +236,63 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, UITabl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+}
+
+extension WeatherViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return forecastList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellIdentifier = "forecastCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WeatherTableVIewCell
+        
+        if forecastList.isEmpty {
+            return cell
+        }
+        
+        var day = forecastList[indexPath.row].day
+        if indexPath.row == 0 {
+            day = "Today"
+        }
+        
+        var image = ""
+        switch Int(forecastList[indexPath.row].code)! {
+        case 32, 34, 36:
+            image = "sunny-40x40"
+        case 31:
+            image = "clear-40x40"
+        case 26:
+            image = "cloudy-40x40.png"
+        case 19, 20, 21, 22, 28, 30, 44:
+            image = "mostly cloudy-40x40"
+        case 27, 29:
+            image = "cloudy-night-40x40"
+        case 9, 10, 11, 12:
+            image = "drizzle-40x40"
+        case 0, 1, 2, 3, 4:
+            image = "thunderstorms-40x40.png"
+        case 37, 38, 39, 40, 45, 47:
+            image = "scattered thunderstorms-40x40"
+        case 23, 24, 25:
+            image = "windy-40x40"
+        case 33:
+            image = "fair-night-40x40"
+        case 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 35, 41, 42, 43, 46:
+            image = "snow-40x30.png"
+        default:
+            image = "sunny=40x40.png"
+        }
+        
+        cell.dayLabel.text = day
+        cell.dateLabel.text = self.forecastList[indexPath.row].date
+        cell.conditionImage.image = UIImage(named: image)
+        cell.conditionImage.clipsToBounds = true
+        cell.highLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].high)!) + "°"
+        cell.lowLabel.text = self.temptranstion(temp: Double(self.forecastList[indexPath.row].low)!) + "°"
+        
+        return cell
     }
 }

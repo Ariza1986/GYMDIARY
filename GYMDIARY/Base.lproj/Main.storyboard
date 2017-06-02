@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Ib Calendar Data Source-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="GYMDIARY" customModuleProvider="target" sceneMemberID="viewController">
@@ -36,9 +36,8 @@
                                     <action selector="resetTrainerInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZfV-g0-CK2"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ffL-DX-90C">
-                                <rect key="frame" x="0.0" y="305" width="320" height="214"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ffL-DX-90C">
+                                <rect key="frame" x="0.0" y="298" width="320" height="221"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="workoutCell" id="lKr-YS-wqq">
@@ -51,32 +50,60 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2An-VP-XL1">
-                                <rect key="frame" x="0.0" y="56" width="320" height="249"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="csa-d6-0Pv">
-                                    <size key="itemSize" width="50" height="50"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="2An-VP-XL1" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
+                                <rect key="frame" x="0.0" y="47" width="320" height="250"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="vL1-MH-4mB"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="csa-d6-0Pv">
+                                    <size key="itemSize" width="97" height="97"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="MhG-Sc-4eO">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="calendarDateCell" id="MhG-Sc-4eO" customClass="WorkoutCalendarCell" customModule="GYMDIARY" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="97" height="97"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="97" height="97"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="v7I-Yj-q24">
+                                                    <rect key="frame" x="35.5" y="34.5" width="27" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="v7I-Yj-q24" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="6h5-sS-teb"/>
+                                            <constraint firstItem="v7I-Yj-q24" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="7bw-aX-si1"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="dateCell" destination="v7I-Yj-q24" id="bVC-VH-9lE"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="ibCalendarDataSource" destination="BYZ-38-t0r" id="xOo-er-Lor"/>
+                                    <outlet property="ibCalendarDelegate" destination="BYZ-38-t0r" id="hwX-5H-GDZ"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="0.87133253099999997" green="1" blue="0.98758375509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="AKL-vy-Jih" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-250" id="5TL-aW-FHn"/>
+                            <constraint firstAttribute="trailing" secondItem="2An-VP-XL1" secondAttribute="trailing" id="CnK-zP-ioX"/>
+                            <constraint firstAttribute="trailing" secondItem="ffL-DX-90C" secondAttribute="trailing" id="Guk-37-adh"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ffL-DX-90C" secondAttribute="bottom" id="R1S-M3-Yfm"/>
+                            <constraint firstItem="ffL-DX-90C" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ZvL-qo-8LU"/>
+                            <constraint firstItem="ffL-DX-90C" firstAttribute="top" secondItem="2An-VP-XL1" secondAttribute="bottom" constant="1" id="afE-An-drQ"/>
                             <constraint firstItem="AKL-vy-Jih" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="0.5" id="qM5-Xc-9lV"/>
+                            <constraint firstItem="2An-VP-XL1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="tKg-s2-dhQ"/>
+                            <constraint firstItem="2An-VP-XL1" firstAttribute="top" secondItem="AKL-vy-Jih" secondAttribute="bottom" constant="-1" id="uAJ-Zv-a3O"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="recents" id="TWG-mZ-Xpf"/>
@@ -102,7 +129,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMc-4d-r4D" customClass="CombinedChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="50" width="320" height="167"/>
+                                <rect key="frame" x="0.0" y="49.5" width="320" height="167.5"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="FMc-4d-r4D" secondAttribute="height" multiplier="320:179" constant="21.452513966480467" id="izI-4s-pYN"/>
@@ -119,7 +146,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bGl-bo-bvf">
-                                <rect key="frame" x="15" y="21" width="290" height="29"/>
+                                <rect key="frame" x="15" y="20.5" width="290" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="290" id="1AT-cg-bm8"/>
                                     <constraint firstAttribute="height" constant="28" id="5Le-RD-u0I"/>
@@ -185,7 +212,7 @@
                             <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jRT-tf-ayz">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="jRT-tf-ayz" secondAttribute="height" multiplier="64:55" id="4zs-ll-dmU"/>
+                                    <constraint firstAttribute="width" secondItem="jRT-tf-ayz" secondAttribute="height" multiplier="64:55" id="ZnQ-FN-hX8"/>
                                 </constraints>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="45" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Z2-IK-yCm">
