@@ -12,6 +12,13 @@ import JTAppleCalendar
 
 class ViewController: UIViewController{
     
+    @IBOutlet weak var workoutCalendarView: JTAppleCalendarView!
+    @IBOutlet weak var workoutTable: UITableView!
+    @IBOutlet weak var month: UILabel!
+    @IBOutlet weak var year: UILabel!
+    
+    var selectedDay = Date()
+    
     var info = TrainerInfo()
     var myUserDefaults = UserDefaults()
     
@@ -19,8 +26,7 @@ class ViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
+
         //get info
         if let data = UserDefaults.standard.data(forKey: "info"),
             let trainerInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as? TrainerInfo {
@@ -43,6 +49,17 @@ class ViewController: UIViewController{
                 self.performSegue(withIdentifier: "goToWeightRecord", sender: self)
             }
         }
+        
+        //⬇︎⬇︎--------WorkoutCalendar----------⬇︎⬇︎
+        workoutCalendarView.minimumLineSpacing = 0
+        workoutCalendarView.minimumInteritemSpacing = 0
+        
+        workoutCalendarView.scrollToDate(Date())
+        
+        workoutCalendarView.visibleDates { visibleDates in
+            self.setupCalendarTitle(visibleDates: visibleDates)
+        }
+        
     }
 
     @IBAction func resetTrainerInfo() {
@@ -56,34 +73,149 @@ class ViewController: UIViewController{
 
     }
     
+    @IBAction func backToToday() {
+        workoutCalendarView.scrollToDate(Date())
+        selectedDay = Date()
+        workoutTable.reloadData()
+    }
+    
+    func setupCalendarTitle(visibleDates: DateSegmentInfo) {
+        let date = visibleDates.monthDates.first?.date
+        formatter.dateFormat = "YYYY"
+        year.text = formatter.string(from: date!) + " "
+        formatter.dateFormat = "MMMM"
+        month.text = formatter.string(from: date!)
+    }
+    
+    func handleCellTextColor(cell: JTAppleCell?, cellState: CellState) {
+        guard let vaildCell = cell as? WorkoutCalendarCell  else {
+            return
+        }
+        
+        if cellState.isSelected {
+            vaildCell.dateCell.textColor = UIColor.black
+        }
+        else {
+            if cellState.dateBelongsTo == .thisMonth {
+                vaildCell.dateCell.textColor = UIColor.white
+            }
+            else
+            {
+                vaildCell.dateCell.textColor = UIColor.darkGray
+            }
+        }
+    }
+    
+    func handleCellSelected(cell: JTAppleCell?, cellState: CellState) {
+        guard let vaildCell = cell as? WorkoutCalendarCell  else {
+            return
+        }
+        if cellState.isSelected {
+            vaildCell.selectView.isHidden = false
+        }
+        else {
+            vaildCell.selectView.isHidden = true
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
 
-extension ViewController: JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
+//⬇︎⬇︎--------WorkoutCalendar----------⬇︎⬇︎
+extension ViewController: JTAppleCalendarViewDataSource {
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         
         formatter.dateFormat = "YYYY-MM-dd"
         formatter.timeZone = Calendar.current.timeZone
         formatter.locale = Calendar.current.locale
         
-        let startDate = formatter.date(from: "2017-01-01")
-        let endDate = formatter.date(from: "2017-12-31")
+        let startDate = Date().subtract(years: 5)
+        let endDate = Date().add(years: 5)
         
-        let parameters = ConfigurationParameters(startDate: startDate!, endDate: endDate!)
-        
+        let parameters = ConfigurationParameters(startDate: startDate,
+                                                 endDate: endDate,
+                                                 numberOfRows: 6,
+                                                 calendar: Calendar.current,
+                                                 generateInDates: .forAllMonths,
+                                                 generateOutDates: .tillEndOfGrid,
+                                                 firstDayOfWeek: .sunday)
         return parameters
     }
     
+}
+
+extension ViewController: JTAppleCalendarViewDelegate {
+    
     func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
-        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: "calendarDateCell", for: indexPath) as! WorkoutCalendarCell
+        
+        let cell = calendar.dequeueReusableJTAppleCell(withReuseIdentifier: "workoutCalendarCell", for: indexPath) as! WorkoutCalendarCell
         cell.dateCell.text = cellState.text
+        
+        handleCellSelected(cell: cell, cellState: cellState)
+        handleCellTextColor(cell: cell, cellState: cellState)
+        
+        formatter.dateFormat = "YYYY-MM-dd"
+        formatter.timeZone = Calendar.current.timeZone
+        formatter.locale = Calendar.current.locale
+        
+        if formatter.string(from: date) == formatter.string(from: Date()) {
+            cell.todayView.isHidden = false
+        }
+        else {
+            cell.todayView.isHidden = true
+        }
+        
         return cell
     }
-
+    
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+        
+        handleCellSelected(cell: cell, cellState: cellState)
+        handleCellTextColor(cell: cell, cellState: cellState)
+        
+        if cellState.dateBelongsTo != .thisMonth {
+            workoutCalendarView.scrollToDate(date)
+        }
+        
+        // reload workoutTable
+        selectedDay = date
+        workoutTable.reloadData()
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+        
+        handleCellSelected(cell: cell, cellState: cellState)
+        handleCellTextColor(cell: cell, cellState: cellState)
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
+        
+        setupCalendarTitle(visibleDates: visibleDates)
+    }
 }
+
+//⬇︎⬇︎--------WorkoutTableView----------⬇︎⬇︎
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellIdentifier = "workoutCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        
+        formatter.dateFormat = "YYYY-MM-dd"
+        
+        cell.textLabel?.text = formatter.string(from: selectedDay)
+        
+        return cell
+    }
+}
+
 
 //close keyboard by touching anywhere
 extension UIViewController {

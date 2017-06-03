@@ -12,6 +12,8 @@ import JTAppleCalendar
 class WorkoutCalendarCell: JTAppleCell {
 
     @IBOutlet weak var dateCell: UILabel!
+    @IBOutlet weak var selectView: UIView!
+    @IBOutlet weak var todayView: UIView!
     
     
 
