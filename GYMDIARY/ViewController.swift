@@ -54,7 +54,7 @@ class ViewController: UIViewController{
         workoutCalendarView.minimumLineSpacing = 0
         workoutCalendarView.minimumInteritemSpacing = 0
         
-        workoutCalendarView.scrollToDate(Date())
+        backToToday()
         
         workoutCalendarView.visibleDates { visibleDates in
             self.setupCalendarTitle(visibleDates: visibleDates)
@@ -75,6 +75,7 @@ class ViewController: UIViewController{
     
     @IBAction func backToToday() {
         workoutCalendarView.scrollToDate(Date())
+        workoutCalendarView.selectDates(from: Date(), to: Date(), triggerSelectionDelegate: true, keepSelectionIfMultiSelectionAllowed: false)
         selectedDay = Date()
         workoutTable.reloadData()
     }
@@ -97,7 +98,15 @@ class ViewController: UIViewController{
         }
         else {
             if cellState.dateBelongsTo == .thisMonth {
-                vaildCell.dateCell.textColor = UIColor.white
+                if cellState.day == .saturday {
+                    vaildCell.dateCell.textColor = UIColor.yellow
+                }
+                else if cellState.day == .sunday {
+                    vaildCell.dateCell.textColor = UIColor.cyan
+                }
+                else {
+                    vaildCell.dateCell.textColor = UIColor.white
+                }
             }
             else
             {
@@ -117,6 +126,25 @@ class ViewController: UIViewController{
             vaildCell.selectView.isHidden = true
         }
     }
+    
+    func handleCellIsToday(cell: JTAppleCell?, date: Date) {
+        guard let vaildCell = cell as? WorkoutCalendarCell  else {
+            return
+        }
+        
+        formatter.dateFormat = "YYYY-MM-dd"
+        formatter.timeZone = Calendar.current.timeZone
+        formatter.locale = Calendar.current.locale
+        
+        if formatter.string(from: date) == formatter.string(from: Date()) {
+            vaildCell.todayView.isHidden = false
+            vaildCell.dateCell.textColor = UIColor.red
+        }
+        else {
+            vaildCell.todayView.isHidden = true
+        }
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -156,17 +184,8 @@ extension ViewController: JTAppleCalendarViewDelegate {
         
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
-        
-        formatter.dateFormat = "YYYY-MM-dd"
-        formatter.timeZone = Calendar.current.timeZone
-        formatter.locale = Calendar.current.locale
-        
-        if formatter.string(from: date) == formatter.string(from: Date()) {
-            cell.todayView.isHidden = false
-        }
-        else {
-            cell.todayView.isHidden = true
-        }
+        handleCellIsToday(cell: cell, date: date)
+
         
         return cell
     }
@@ -175,6 +194,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
+        handleCellIsToday(cell: cell, date: date)
         
         if cellState.dateBelongsTo != .thisMonth {
             workoutCalendarView.scrollToDate(date)
@@ -189,6 +209,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
+        handleCellIsToday(cell: cell, date: date)
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
