@@ -23,9 +23,9 @@ class AddWorkoutViewController: UIViewController {
         
         // Do any additional setup after loading the view.
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
         self.containerView.transform = CGAffineTransform.identity
         })
     }

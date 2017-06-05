@@ -234,7 +234,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="FLz-gG-bL6" kind="presentation" identifier="goToAddWorkout" animates="NO" id="TMg-Qq-JRp"/>
+                                    <segue destination="FLz-gG-bL6" kind="presentation" identifier="goToAddWorkout" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="TMg-Qq-JRp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBL-mJ-a3b">
@@ -782,12 +782,16 @@
                         <viewControllerLayoutGuide type="top" id="7gT-9e-RCq"/>
                         <viewControllerLayoutGuide type="bottom" id="qFu-8Q-JoO"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ZkK-QU-SSK">
+                    <view key="view" alpha="0.59999999999999998" contentMode="scaleToFill" id="ZkK-QU-SSK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oKj-8w-NNS">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DLD-dJ-hMD">
-                                <rect key="frame" x="20" y="59" width="280" height="450"/>
+                                <rect key="frame" x="20" y="59" width="280" height="475"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="qQI-wA-ut9">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="73"/>
@@ -885,7 +889,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-vI-5BI">
-                                        <rect key="frame" x="108" y="412" width="65" height="37"/>
+                                        <rect key="frame" x="108" y="437" width="65" height="37"/>
                                         <color key="backgroundColor" red="0.084081478419999994" green="0.51261365410000004" blue="0.77023059130000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="65" id="Ifw-Dg-Slr"/>
@@ -909,7 +913,7 @@
                                     <constraint firstAttribute="width" constant="280" id="LtN-VA-kSN"/>
                                     <constraint firstAttribute="trailing" secondItem="7cd-Ho-M7N" secondAttribute="trailing" constant="-8" id="c65-cE-SKB"/>
                                     <constraint firstItem="RI5-vI-5BI" firstAttribute="centerX" secondItem="DLD-dJ-hMD" secondAttribute="centerX" id="da4-OF-DuU"/>
-                                    <constraint firstAttribute="height" constant="450" id="e1s-0w-ZNf"/>
+                                    <constraint firstAttribute="height" constant="475" id="e1s-0w-ZNf"/>
                                     <constraint firstItem="7cd-Ho-M7N" firstAttribute="top" secondItem="DLD-dJ-hMD" secondAttribute="top" constant="-15" id="eXO-Xo-Vim"/>
                                     <constraint firstAttribute="bottomMargin" secondItem="RI5-vI-5BI" secondAttribute="bottom" constant="-7" id="mV5-eh-zUs"/>
                                 </constraints>
@@ -920,10 +924,14 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.87133253099999997" green="1" blue="0.98758375509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="DLD-dJ-hMD" firstAttribute="centerY" secondItem="ZkK-QU-SSK" secondAttribute="centerY" id="GX1-3K-oOD"/>
+                            <constraint firstItem="DLD-dJ-hMD" firstAttribute="centerY" secondItem="ZkK-QU-SSK" secondAttribute="centerY" constant="12.5" id="GX1-3K-oOD"/>
+                            <constraint firstAttribute="bottom" secondItem="oKj-8w-NNS" secondAttribute="bottom" id="Tm6-BC-9HL"/>
+                            <constraint firstItem="oKj-8w-NNS" firstAttribute="leading" secondItem="ZkK-QU-SSK" secondAttribute="leading" id="hT8-xg-fio"/>
                             <constraint firstItem="DLD-dJ-hMD" firstAttribute="centerX" secondItem="ZkK-QU-SSK" secondAttribute="centerX" id="qhb-xf-Qtc"/>
+                            <constraint firstItem="oKj-8w-NNS" firstAttribute="top" secondItem="ZkK-QU-SSK" secondAttribute="top" id="vf6-82-ZOB"/>
+                            <constraint firstAttribute="trailing" secondItem="oKj-8w-NNS" secondAttribute="trailing" id="z00-xT-zWe"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -938,7 +946,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qgU-JF-CAa" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="9V8-yL-Dj6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1367" y="-200"/>
+            <point key="canvasLocation" x="1366.875" y="-200.70422535211267"/>
         </scene>
         <!--Trainer Info View Controller-->
         <scene sceneID="fEX-nd-HZy">
