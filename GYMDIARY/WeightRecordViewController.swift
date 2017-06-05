@@ -366,15 +366,10 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             
             writeDairyRecord()
             
-            self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
+            //close view
+            //navigationController?.popViewController(animated: true)
+            //dismiss(animated: true, completion: nil)
         }
-    }
-    
-    @IBAction func pressSkipButton() {
-        //self.performSegue(withIdentifier: "scaleBackToMainView", sender: self)
-        
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
     }
     
     //⬇︎⬇︎--------RLM_DB----------⬇︎⬇︎

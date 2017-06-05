@@ -65,7 +65,7 @@ class ViewController: UIViewController{
     @IBAction func resetTrainerInfo() {
         myUserDefaults.removeObject(forKey: "info")
         myUserDefaults.synchronize()
-        
+        print("reset")
         //let realm = try! Realm()
         //try! realm.write {
         //    realm.deleteAll()
@@ -145,6 +145,10 @@ class ViewController: UIViewController{
         }
     }
 
+    //⬇︎⬇︎--------Unwind to Root View Controller----------⬇︎⬇︎
+    @IBAction func unwindToRootViewController(segue: UIStoryboardSegue) {
+        print("Unwind to Root View Controller")
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
