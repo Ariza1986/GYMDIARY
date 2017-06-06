@@ -66,10 +66,14 @@ class ViewController: UIViewController{
         myUserDefaults.removeObject(forKey: "info")
         myUserDefaults.synchronize()
         print("reset")
-        //let realm = try! Realm()
-        //try! realm.write {
-        //    realm.deleteAll()
-        //}
+
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "date > %@", Date() as NSDate)
+        if let dairyRecords = realm.objects(RLM_DairyRecord.self).filter(predicate).first {
+            try! realm.write {
+                realm.delete(dairyRecords)
+            }
+        }
 
     }
     

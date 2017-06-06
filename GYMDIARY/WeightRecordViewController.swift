@@ -198,6 +198,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
     
     //⬇︎⬇︎----------GetChartDataList-----------⬇︎⬇︎
     func getChartDataList(before: String) {
+        
         let realm = try! Realm()
         var predicate:NSPredicate!
         
@@ -362,7 +363,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             UserDefaults.standard.set(encodedData, forKey: "info")
             myUserDefaults.synchronize()
             
-            info.showAll()
+            //info.showAll()
             
             writeDairyRecord()
             

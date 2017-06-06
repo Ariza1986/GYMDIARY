@@ -11,6 +11,22 @@ import UIKit
 class AddWorkoutViewController: UIViewController {
    
     @IBOutlet weak var containerView: UIView!
+    
+    @IBOutlet weak var workoutDatePicker: UIDatePicker!
+    @IBOutlet weak var categoryTextField: UITextField!
+    @IBOutlet weak var itemTextField: UITextField!
+    @IBOutlet weak var setsTextField: UITextField!
+    @IBOutlet weak var repsTextField: UITextField!
+    @IBOutlet weak var kgTextField: UITextField!
+    
+    let categoryPicker = UIPickerView()
+    let itemPicker = UIDatePicker()
+    let setsPicker = UIPickerView()
+    let repsPicker = UIPickerView()
+    let kgPicker = UIPickerView()
+    
+    var textFieldList:[UITextField]!
+    var pickerViewList:[UIPickerView]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +50,4 @@ class AddWorkoutViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func accept() {
-        print("accept")
-    }
-
 }
