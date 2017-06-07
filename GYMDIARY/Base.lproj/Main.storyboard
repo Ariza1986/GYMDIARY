@@ -641,7 +641,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="pressOkButton" destination="zvQ-RQ-Hp9" eventType="touchUpInside" id="wla-Xe-tka"/>
-                                            <segue destination="gAI-7T-YJh" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="C0C-te-JY6"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillEqually" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="GJt-bu-Mjy">
@@ -662,7 +661,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="gAI-7T-YJh" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="FIa-U0-cqn"/>
+                                            <segue destination="gAI-7T-YJh" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="duU-lW-ZtR"/>
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WsA-5w-Qh9" customClass="CombinedChartView" customModule="Charts">
@@ -772,6 +771,7 @@
                         <outlet property="chartViewSegCtrl" destination="SqW-4a-dE7" id="xQm-kC-4nQ"/>
                         <outlet property="combinedChartView" destination="WsA-5w-Qh9" id="L95-mg-uip"/>
                         <outlet property="weightTextField" destination="Grj-Yi-LtH" id="PW7-Vd-ZBS"/>
+                        <segue destination="gAI-7T-YJh" kind="unwind" identifier="scaleBackTo" unwindAction="unwindToRootViewControllerWithSegue:" id="ik8-Ic-OIg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NtS-bT-0iG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -829,7 +829,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="9V8-yL-Dj6" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="kLC-cy-hlG"/>
+                                            <segue destination="9V8-yL-Dj6" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="Rau-gL-U4H"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRm-od-mbG">
@@ -862,7 +862,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="addWorkoutSets" destination="FLz-gG-bL6" eventType="touchUpInside" id="Ng8-BL-HIE"/>
-                                            <segue destination="9V8-yL-Dj6" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="Vfe-ue-Wty"/>
                                         </connections>
                                     </button>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pe4-BN-d87">
@@ -1002,6 +1001,7 @@
                         <outlet property="setsLabel" destination="z9w-Wl-5Va" id="w2Y-pK-386"/>
                         <outlet property="setsTextField" destination="W6b-OV-w0Q" id="gUq-xb-z94"/>
                         <outlet property="workoutDatePicker" destination="qQI-wA-ut9" id="JYm-lI-1vu"/>
+                        <segue destination="9V8-yL-Dj6" kind="unwind" identifier="addWorkoutBackTo" unwindAction="unwindToRootViewControllerWithSegue:" id="PBl-hb-qcb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qgU-JF-CAa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1155,7 +1155,6 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="pressOkButton" destination="XLx-Oo-6gp" eventType="touchUpInside" id="qeD-zw-37H"/>
-                                            <segue destination="BtA-ht-bsn" kind="unwind" unwindAction="unwindToRootViewControllerWithSegue:" id="nQu-Ja-38G"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1194,6 +1193,7 @@
                         <outlet property="nameTextField" destination="DwK-bX-hh2" id="L44-87-Fj7"/>
                         <outlet property="sexTextField" destination="lo9-Yq-Q7X" id="r4E-qH-LLZ"/>
                         <outlet property="weightTextField" destination="QYb-bx-P5W" id="vzd-fE-eeC"/>
+                        <segue destination="BtA-ht-bsn" kind="unwind" identifier="newTrainerInfoBackTo" unwindAction="unwindToRootViewControllerWithSegue:" id="YVu-cz-vUC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LtL-K9-zf7" userLabel="First Responder" sceneMemberID="firstResponder"/>

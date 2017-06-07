@@ -367,6 +367,7 @@ class WeightRecordViewController: UIViewController, UITextFieldDelegate, UIPicke
             
             writeDairyRecord()
             
+            self.performSegue(withIdentifier: "scaleBackTo", sender: self)
             //close view
             //navigationController?.popViewController(animated: true)
             //dismiss(animated: true, completion: nil)

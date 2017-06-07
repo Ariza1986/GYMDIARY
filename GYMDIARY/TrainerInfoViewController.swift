@@ -311,6 +311,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
             
             //db writeData
             writeDairyRecord()
+            self.performSegue(withIdentifier: "newTrainerInfoBackTo", sender: self)
         }
     }
     
