@@ -61,28 +61,6 @@ class ViewController: UIViewController{
         }
         
     }
-
-    @IBAction func resetTrainerInfo() {
-        myUserDefaults.removeObject(forKey: "info")
-        myUserDefaults.synchronize()
-        print("reset")
-
-        let realm = try! Realm()
-        let predicate = NSPredicate(format: "date > %@", Date() as NSDate)
-        if let dairyRecords = realm.objects(RLM_DairyRecord.self).filter(predicate).first {
-            try! realm.write {
-                realm.delete(dairyRecords)
-            }
-        }
-
-    }
-    
-    @IBAction func backToToday() {
-        workoutCalendarView.scrollToDate(Date())
-        workoutCalendarView.selectDates(from: Date(), to: Date(), triggerSelectionDelegate: true, keepSelectionIfMultiSelectionAllowed: false)
-        selectedDay = Date()
-        workoutTable.reloadData()
-    }
     
     func setupCalendarTitle(visibleDates: DateSegmentInfo) {
         let date = visibleDates.monthDates.first?.date
@@ -148,10 +126,41 @@ class ViewController: UIViewController{
             vaildCell.todayView.isHidden = true
         }
     }
-
+    
+    //⬇︎⬇︎--------Prepare segue----------⬇︎⬇︎
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToAddWorkout" {
+            if let destinationController = segue.destination as? AddWorkoutViewController {
+                destinationController.selectedDay = self.selectedDay
+            }
+        }
+    }
+    
     //⬇︎⬇︎--------Unwind to Root View Controller----------⬇︎⬇︎
     @IBAction func unwindToRootViewController(segue: UIStoryboardSegue) {
         print("Unwind to Root View Controller")
+    }
+    
+    @IBAction func backToToday() {
+        workoutCalendarView.scrollToDate(Date())
+        workoutCalendarView.selectDates(from: Date(), to: Date(), triggerSelectionDelegate: true, keepSelectionIfMultiSelectionAllowed: false)
+        selectedDay = Date()
+        workoutTable.reloadData()
+    }
+    
+    @IBAction func resetTrainerInfo() {
+        myUserDefaults.removeObject(forKey: "info")
+        myUserDefaults.synchronize()
+        print("reset")
+        
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "date > %@", Date() as NSDate)
+        if let dairyRecords = realm.objects(RLM_DairyRecord.self).filter(predicate).first {
+            try! realm.write {
+                realm.delete(dairyRecords)
+            }
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {

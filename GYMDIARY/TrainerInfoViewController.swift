@@ -94,7 +94,7 @@ class TrainerInfoViewController: UIViewController, UITextFieldDelegate, UIPicker
         
         //date pickerview
         birthdayPicker.datePickerMode = .date
-        birthdayPicker.date = Date()
+        birthdayPicker.date = Date().subtract(years: 20)
         birthdayPicker.minimumDate = formatter.date(from: "1930-01-01")
         birthdayPicker.maximumDate = formatter.date(from: todayStr!)
         birthdayPicker.locale = Locale(identifier: "zh_TW")
