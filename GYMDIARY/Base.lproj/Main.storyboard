@@ -1001,6 +1001,7 @@
                         <outlet property="setsLabel" destination="z9w-Wl-5Va" id="w2Y-pK-386"/>
                         <outlet property="setsTextField" destination="W6b-OV-w0Q" id="gUq-xb-z94"/>
                         <outlet property="workoutDatePicker" destination="qQI-wA-ut9" id="JYm-lI-1vu"/>
+                        <outlet property="workoutTableView" destination="pe4-BN-d87" id="eRw-Jj-S8g"/>
                         <segue destination="9V8-yL-Dj6" kind="unwind" identifier="addWorkoutBackTo" unwindAction="unwindToRootViewControllerWithSegue:" id="PBl-hb-qcb"/>
                     </connections>
                 </viewController>

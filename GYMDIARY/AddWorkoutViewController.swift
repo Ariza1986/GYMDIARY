@@ -28,12 +28,12 @@ struct WorkoutSet {
     
     init() {
         uuid = ""
-        sets = 1
-        reps = 1
+        sets = 0
+        reps = 0
         mins = 0
         secs = 0
         kg = 0.0
-        km = 0.1
+        km = 0.0
     }
     
     func showAll() {
@@ -57,6 +57,7 @@ class AddWorkoutViewController: UIViewController {
     @IBOutlet weak var setsTextField: UITextField!
     @IBOutlet weak var repsTextField: UITextField!
     @IBOutlet weak var kgTextField: UITextField!
+    @IBOutlet weak var workoutTableView: UITableView!
     
     @IBOutlet weak var setsLabel: UILabel!
     @IBOutlet weak var repsLabel: UILabel!
@@ -84,7 +85,7 @@ class AddWorkoutViewController: UIViewController {
     
     let setsPickerData = [Int](1...100)
     let repsPickerData = [Int](1...200)
-    var kgPickerData = [0.0]
+    var kgPickerData = [0.00]
     let kmPickerData = [Int](1...1000)
     let minsPickerData = [Int](0...500)
     let secsPickerData = [Int](0...60)
@@ -128,6 +129,8 @@ class AddWorkoutViewController: UIViewController {
             pickerView.tag = index + 1
         }
         
+        //workoutTableView.allowsSelection = false
+        
         //⬇︎⬇︎--------DateSetting----------⬇︎⬇︎
         formatter.dateFormat = "YYYY-MM-dd"
         formatter.timeZone = Calendar.current.timeZone
@@ -151,6 +154,7 @@ class AddWorkoutViewController: UIViewController {
             
             workoutSet = WorkoutSet()
             workoutSets.removeAll()
+            workoutTableView.reloadData()
         }
         switch type {
         case 1:
@@ -194,6 +198,15 @@ class AddWorkoutViewController: UIViewController {
         print("item:\t\t\(item)")
         print("setStatus:\t\(setStatus)")
         workoutSet.showAll()
+
+        for textField in textFieldList {
+            if (textField.text?.isEmpty)! {
+                textField.isEmptyField()
+                return
+            }
+        }
+        workoutSets.append(workoutSet)
+        workoutTableView.reloadData()
     }
     
     @IBAction func addWorkoutSets() {
@@ -252,38 +265,59 @@ extension AddWorkoutViewController:  UITextFieldDelegate{
                         changeSetType(type: 1)
                     }
                 }
+                else {
+                    categoryTextField.isEmptyField()
+                }
             case 3:
                 if !(itemTextField.text?.isEmpty)! {
                     switch setStatus {
                     case 1, 3:  //for sets
                         setsTextField.text = "1"
+                        workoutSet.sets = 1
                     case 2:     //for KM
                         setsTextField.text = "0.1"
+                        workoutSet.km = 0.1
                     default:
                         print("Error:setsTextField")
                     }
+                }
+                else {
+                    categoryTextField.isEmptyField()
+                    itemTextField.isEmptyField()
                 }
             case 4:
                 if !(itemTextField.text?.isEmpty)! {
                     switch setStatus {
                     case 1:     //for reps
                         repsTextField.text = "1"
+                        workoutSet.reps = 1
                     case 2, 3:  //for mins
                         repsTextField.text = "0"
+                        workoutSet.mins = 0
                     default:
                         print("Error:repsTextField")
                     }
+                }
+                else {
+                    categoryTextField.isEmptyField()
+                    itemTextField.isEmptyField()
                 }
             case 5:
                 if !(itemTextField.text?.isEmpty)! {
                     switch setStatus {
                     case 1:   //for KG
-                        kgTextField.text = "0"
+                        kgTextField.text = "0.0"
+                        workoutSet.kg = 0.0
                     case 2, 3://for secs
                         kgTextField.text = "0"
+                        workoutSet.secs = 0
                     default:
                         print("Error:kgTextField")
                     }
+                }
+                else {
+                    categoryTextField.isEmptyField()
+                    itemTextField.isEmptyField()
                 }
             default: break
             }
@@ -332,6 +366,48 @@ extension AddWorkoutViewController:UIPickerViewDelegate, UIPickerViewDataSource 
             else {
                 return 0
             }
+        case 3:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1, 3:
+                    return setsPickerData.count
+                case 2:
+                    return kmPickerData.count
+                default:
+                    return 0
+                }
+            }
+            else {
+                return 0
+            }
+        case 4:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1:
+                    return repsPickerData.count
+                case 2, 3:
+                    return minsPickerData.count
+                default:
+                    return 0
+                }
+            }
+            else {
+                return 0
+            }
+        case 5:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1:
+                    return kgPickerData.count
+                case 2, 3:
+                    return secsPickerData.count
+                default:
+                    return 0
+                }
+            }
+            else {
+                return 0
+            }
         default:
             return 0
         }
@@ -355,6 +431,33 @@ extension AddWorkoutViewController:UIPickerViewDelegate, UIPickerViewDataSource 
             case .Arm:
                 return armItemPickerData[row]
             }
+        case 3:
+            switch setStatus {
+            case 1, 3:
+                return String(setsPickerData[row])
+            case 2:
+                return String(Double(kmPickerData[row])/10)
+            default:
+                return "Error: setsPickerData"
+            }
+        case 4:
+            switch setStatus {
+            case 1:
+                return String(repsPickerData[row])
+            case 2, 3:
+                return String(minsPickerData[row])
+            default:
+                return "Error: repsPickerData"
+            }
+        case 5:
+            switch setStatus {
+            case 1:
+                return String(kgPickerData[row])
+            case 2, 3:
+                return String(secsPickerData[row])
+            default:
+                return "Error: kgPickerData"
+            }
         default:
             return "Error:titleForRow"
         }
@@ -373,7 +476,7 @@ extension AddWorkoutViewController:UIPickerViewDelegate, UIPickerViewDataSource 
                 switch category {
                 case .Core:
                     itemTextField.text = coreItemPickerData[row]
-                    item = coreItemPickerData[0]
+                    item = coreItemPickerData[row]
                     if row <= 1 {   //for Plank, Side Plank
                         changeSetType(type: 3)
                     }
@@ -382,51 +485,105 @@ extension AddWorkoutViewController:UIPickerViewDelegate, UIPickerViewDataSource 
                     }
                 case .Aerobic:
                     itemTextField.text = aerobicItemPickerData[row]
-                    item = aerobicItemPickerData[0]
+                    item = aerobicItemPickerData[row]
                     changeSetType(type: 2)
                 case .Chest:
                     itemTextField.text = chestItemPickerData[row]
-                    item = chestItemPickerData[0]
+                    item = chestItemPickerData[row]
                     changeSetType(type: 1)
                 case .Back:
                     itemTextField.text = backItemPickerData[row]
-                    item = backItemPickerData[0]
+                    item = backItemPickerData[row]
                     changeSetType(type: 1)
                 case .Leg:
                     itemTextField.text = legItemPickerData[row]
-                    item = legItemPickerData[0]
+                    item = legItemPickerData[row]
                     changeSetType(type: 1)
                 case .Arm:
                     itemTextField.text = armItemPickerData[row]
-                    item = armItemPickerData[0]
+                    item = armItemPickerData[row]
                     changeSetType(type: 1)
+                }
+            }
+        case 3:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1, 3:  //sets
+                    setsTextField.text = String(setsPickerData[row])
+                    workoutSet.sets = setsPickerData[row]
+                case 2:     //km
+                    setsTextField.text = String(Double(kmPickerData[row])/10)
+                    workoutSet.km = Double(kmPickerData[row])/10
+                default:
+                print("Error:setsTextField")
+                break
+                }
+            }
+        case 4:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1:     //reps
+                    repsTextField.text = String(repsPickerData[row])
+                    workoutSet.reps = repsPickerData[row]
+                case 2, 3:  //mins
+                    repsTextField.text = String(minsPickerData[row])
+                    workoutSet.mins = minsPickerData[row]
+                default:
+                    print("Error:repsTextField")
+                    break
+                }
+            }
+        case 5:
+            if !(itemTextField.text?.isEmpty)! {
+                switch setStatus {
+                case 1:     //kg
+                    kgTextField.text = String(kgPickerData[row])
+                    workoutSet.kg = kgPickerData[row]
+                case 2, 3:  //secs
+                    kgTextField.text = String(secsPickerData[row])
+                    workoutSet.secs = secsPickerData[row]
+                default:
+                    print("Error:kgTextField")
+                    break
                 }
             }
         default:
             print("Error:didSwlectRow")
         }
     }
-    //pickerview width for component
-    //func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-    //    return 100.0
-    //}
-
 }
 
 extension AddWorkoutViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return workoutSets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "setCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
-        cell.textLabel?.text = "123"
+        switch setStatus {
+        case 1:  //sets reps kg
+            cell.textLabel?.text = String(workoutSets[indexPath.row].sets)
+        case 2:  //km mins secs
+            cell.textLabel?.text = String(workoutSets[indexPath.row].km) + " Km" + "\t\t" + "time: " +
+                                    String(workoutSets[indexPath.row].mins) + ":" +
+                                    String(workoutSets[indexPath.row].secs)
+        case 3:  //sets mins secs
+            cell.textLabel?.text = String(workoutSets[indexPath.row].sets)
+        default:
+            print("Error:cellforrow")
+            break
+        }
         cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.textAlignment = .center
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
     }
 }
 
