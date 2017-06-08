@@ -20,6 +20,17 @@ class RLM_DairyRecord:Object {
     }
 }
 
+class RLM_WorkoutSet:Object {
+    private(set) dynamic var uuid:String = UUID().uuidString
+    dynamic var date:NSDate = NSDate()
+    dynamic var category:Int = 0
+    dynamic var item:String = ""
+    
+    override static func primaryKey() -> String {
+        return "uuid"
+    }
+}
+
 class TrainerInfo: NSObject, NSCoding {
     var name:String
     var sex:String

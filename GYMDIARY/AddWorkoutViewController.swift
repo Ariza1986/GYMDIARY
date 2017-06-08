@@ -63,6 +63,8 @@ class AddWorkoutViewController: UIViewController {
     @IBOutlet weak var repsLabel: UILabel!
     @IBOutlet weak var kgLabel: UILabel!
     
+    @IBOutlet weak var modifyButton: UIButton!
+    
     let categoryPicker = UIPickerView()
     let itemPicker = UIPickerView()
     let setsPicker = UIPickerView()
@@ -88,7 +90,7 @@ class AddWorkoutViewController: UIViewController {
     var kgPickerData = [0.00]
     let kmPickerData = [Int](1...1000)
     let minsPickerData = [Int](0...500)
-    let secsPickerData = [Int](0...60)
+    let secsPickerData = [Int](0...59)
     
     let formatter = DateFormatter()
     var selectedDay:Date!
@@ -97,6 +99,7 @@ class AddWorkoutViewController: UIViewController {
     var workoutSet = WorkoutSet()
     var workoutSets = [WorkoutSet]()
     var setStatus = 1
+    var selectedIndexRow = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,8 +131,6 @@ class AddWorkoutViewController: UIViewController {
             textFieldList[index].inputView = pickerView
             pickerView.tag = index + 1
         }
-        
-        //workoutTableView.allowsSelection = false
         
         //⬇︎⬇︎--------DateSetting----------⬇︎⬇︎
         formatter.dateFormat = "YYYY-MM-dd"
@@ -197,8 +198,7 @@ class AddWorkoutViewController: UIViewController {
         print("category:\t\(category)")
         print("item:\t\t\(item)")
         print("setStatus:\t\(setStatus)")
-        workoutSet.showAll()
-
+        
         for textField in textFieldList {
             if (textField.text?.isEmpty)! {
                 textField.isEmptyField()
@@ -207,6 +207,13 @@ class AddWorkoutViewController: UIViewController {
         }
         workoutSets.append(workoutSet)
         workoutTableView.reloadData()
+    }
+    
+    @IBAction func modifyWorkoutSet() {
+        workoutSets[selectedIndexRow] = workoutSet
+        print(selectedIndexRow)
+        workoutTableView.reloadData()
+        modifyButton.isHidden = true
     }
     
     @IBAction func addWorkoutSets() {
@@ -565,13 +572,15 @@ extension AddWorkoutViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch setStatus {
         case 1:  //sets reps kg
-            cell.textLabel?.text = String(workoutSets[indexPath.row].sets)
+            cell.textLabel?.text = String(workoutSets[indexPath.row].sets) + " sets " +
+                                    String(workoutSets[indexPath.row].reps) + " reps " +
+                                    String(workoutSets[indexPath.row].kg) + "kg"
         case 2:  //km mins secs
-            cell.textLabel?.text = String(workoutSets[indexPath.row].km) + " Km" + "\t\t" + "time: " +
-                                    String(workoutSets[indexPath.row].mins) + ":" +
-                                    String(workoutSets[indexPath.row].secs)
+            cell.textLabel?.text = String(workoutSets[indexPath.row].km) + " Km\t\t" + "T: " +
+                                    timeFormatter(mins: workoutSets[indexPath.row].mins, secs: workoutSets[indexPath.row].secs)
         case 3:  //sets mins secs
-            cell.textLabel?.text = String(workoutSets[indexPath.row].sets)
+            cell.textLabel?.text = String(workoutSets[indexPath.row].sets)  + " sets\t\t" + "T: " +
+                                    timeFormatter(mins: workoutSets[indexPath.row].mins, secs: workoutSets[indexPath.row].secs)
         default:
             print("Error:cellforrow")
             break
@@ -583,7 +592,68 @@ extension AddWorkoutViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        selectedIndexRow = indexPath.row
+        modifyButton.isHidden = false
+        
+        workoutSet = workoutSets[indexPath.row]
+        setsTextField.text = String(workoutSet.sets)
+        
+        switch setStatus {
+        case 1:// sets reps kg
+            resetText(sets: String(workoutSet.sets),
+                      reps: String(workoutSet.reps),
+                      kg: String(workoutSet.kg),
+                      setsSelectRow: workoutSet.sets - 1,
+                      repsSelectRow: workoutSet.reps - 1,
+                      kgSelectRow: Int(workoutSet.kg / 0.25))
+        case 2:// km mins secs
+            resetText(sets: String(workoutSet.km),
+                      reps: String(workoutSet.mins),
+                      kg: String(workoutSet.secs),
+                      setsSelectRow: Int(workoutSet.km * 10 - 1),
+                      repsSelectRow: workoutSet.mins,
+                      kgSelectRow: workoutSet.secs)
+        case 3:// sets mins secs
+            resetText(sets: String(workoutSet.sets),
+                      reps: String(workoutSet.mins),
+                      kg: String(workoutSet.secs),
+                      setsSelectRow: workoutSet.sets - 1,
+                      repsSelectRow: workoutSet.mins,
+                      kgSelectRow: workoutSet.secs)
+        default:
+            print("Error:kgTextField")
+            break
+        }
+    }
+    func resetText(sets: String, reps: String, kg: String, setsSelectRow: Int, repsSelectRow: Int, kgSelectRow: Int) {
+        setsTextField.text = String(sets)
+        repsTextField.text = String(reps)
+        kgTextField.text = String(kg)
+        setsPicker.selectRow(setsSelectRow, inComponent: 0, animated: true)
+        repsPicker.selectRow(repsSelectRow, inComponent: 0, animated: true)
+        kgPicker.selectRow(kgSelectRow, inComponent: 0, animated: true)
     }
 }
 
+extension UIViewController {
+    func timeFormatter (mins: Int, secs: Int) -> String {
+        var minsStr:String = ""
+        var secsStr:String = ""
+        switch mins {
+        case 0...9:
+            minsStr = "00:0\(mins):"
+        case 10...59:
+            minsStr = "00:\(mins):"
+        default:
+            minsStr = "\((mins/60) < 10 ? "0\(mins/60)" : "\(mins/60)"):" +
+            "\((mins%60) < 10 ? "0\(mins%60)" : "\(mins%60)"):"
+        }
+        switch secs {
+        case 0...9:
+            secsStr = "0\(secs)"
+        default:
+            secsStr = "\(secs)"
+        }
+        return minsStr + secsStr
+    }
+}
