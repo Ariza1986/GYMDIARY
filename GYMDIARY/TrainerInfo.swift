@@ -21,10 +21,19 @@ class RLM_DairyRecord:Object {
 }
 
 class RLM_WorkoutSet:Object {
+    
     private(set) dynamic var uuid:String = UUID().uuidString
     dynamic var date:NSDate = NSDate()
     dynamic var category:Int = 0
     dynamic var item:String = ""
+    dynamic var setStatus:Int = 1
+    
+    dynamic var sets:Int = 0
+    dynamic var reps:Int = 0
+    dynamic var mins:Int = 0
+    dynamic var secs:Int = 0
+    dynamic var kg:Double = 0.0
+    dynamic var km:Double = 0.0
     
     override static func primaryKey() -> String {
         return "uuid"

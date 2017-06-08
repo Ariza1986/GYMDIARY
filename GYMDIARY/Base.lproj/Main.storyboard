@@ -143,6 +143,21 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
+                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="csg-BN-2sy">
+                                                            <rect key="frame" x="2" y="0.0" width="40" height="40"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="40" id="NhM-ls-WFU"/>
+                                                                <constraint firstAttribute="height" constant="40" id="omB-pF-ILg"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                    <integer key="value" value="20"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                                    <real key="value" value="1.5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
                                                         <view hidden="YES" alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o7V-26-hZo">
                                                             <rect key="frame" x="2" y="0.0" width="40" height="40"/>
                                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -160,7 +175,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v7I-Yj-q24">
-                                                            <rect key="frame" x="8.5" y="6.5" width="27" height="27"/>
+                                                            <rect key="frame" x="9" y="7" width="27" height="27"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="27" id="EPd-oe-wp9"/>
                                                                 <constraint firstAttribute="height" constant="27" id="GkI-dg-FjV"/>
@@ -172,18 +187,21 @@
                                                     </subviews>
                                                 </view>
                                                 <constraints>
+                                                    <constraint firstItem="v7I-Yj-q24" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="6QR-cj-wus"/>
+                                                    <constraint firstItem="v7I-Yj-q24" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="9QE-0K-EP5"/>
                                                     <constraint firstItem="Je6-A3-fxT" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="Hfp-wl-lKH"/>
                                                     <constraint firstItem="Je6-A3-fxT" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="J3Q-8x-Cff"/>
-                                                    <constraint firstItem="v7I-Yj-q24" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="Xf2-tK-jhy"/>
-                                                    <constraint firstItem="v7I-Yj-q24" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="c8L-qB-Edg"/>
-                                                    <constraint firstItem="o7V-26-hZo" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="oys-Ay-k1O"/>
-                                                    <constraint firstItem="o7V-26-hZo" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="wWX-Db-qll"/>
+                                                    <constraint firstItem="csg-BN-2sy" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="J7y-zN-IY2"/>
+                                                    <constraint firstItem="o7V-26-hZo" firstAttribute="centerX" secondItem="MhG-Sc-4eO" secondAttribute="centerX" id="PGm-R0-Zd1"/>
+                                                    <constraint firstItem="csg-BN-2sy" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="fOR-yP-3nI"/>
+                                                    <constraint firstItem="o7V-26-hZo" firstAttribute="centerY" secondItem="MhG-Sc-4eO" secondAttribute="centerY" id="xUs-Cj-QpW"/>
                                                 </constraints>
                                                 <size key="customSize" width="45.5" height="41"/>
                                                 <connections>
                                                     <outlet property="dateCell" destination="v7I-Yj-q24" id="bVC-VH-9lE"/>
                                                     <outlet property="selectView" destination="Je6-A3-fxT" id="JOr-qE-O6y"/>
                                                     <outlet property="todayView" destination="o7V-26-hZo" id="Vuy-46-aqN"/>
+                                                    <outlet property="workoutView" destination="csg-BN-2sy" id="upj-Kn-SfK"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>

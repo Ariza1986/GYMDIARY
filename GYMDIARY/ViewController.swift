@@ -10,6 +10,8 @@ import UIKit
 import RealmSwift
 import JTAppleCalendar
 
+var workoutDay:[Date] = []
+
 class ViewController: UIViewController{
     
     @IBOutlet weak var workoutCalendarView: JTAppleCalendarView!
@@ -26,7 +28,9 @@ class ViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        getWorkoutDateList()
+        
         //get info
         if let data = UserDefaults.standard.data(forKey: "info"),
             let trainerInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as? TrainerInfo {
@@ -68,6 +72,17 @@ class ViewController: UIViewController{
         year.text = formatter.string(from: date!) + " "
         formatter.dateFormat = "MMMM"
         month.text = formatter.string(from: date!)
+    }
+    
+    func getWorkoutDateList() {
+        let realm = try! Realm()
+        
+        let workoutSets = realm.objects(RLM_WorkoutSet.self)//.filter("date BETWEEN %@", [startDate, endDate])
+        if workoutSets.count > 0 {
+            for workoutSet in workoutSets {
+                workoutDay.append(workoutSet.date as Date)
+            }
+        }
     }
     
     func handleCellTextColor(cell: JTAppleCell?, cellState: CellState) {
@@ -127,6 +142,20 @@ class ViewController: UIViewController{
         }
     }
     
+    func handleCellIsWorkoutDay(cell: JTAppleCell?, date: Date) {
+        guard let vaildCell = cell as? WorkoutCalendarCell  else {
+            return
+        }
+
+        if workoutDay.contains(date) {
+            vaildCell.workoutView.isHidden = false
+            vaildCell.workoutView.layer.borderColor = UIColor.white.cgColor
+        }
+        else {
+            vaildCell.workoutView.isHidden = true
+        }
+    }
+    
     //⬇︎⬇︎--------Prepare segue----------⬇︎⬇︎
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToAddWorkout" {
@@ -138,7 +167,11 @@ class ViewController: UIViewController{
     
     //⬇︎⬇︎--------Unwind to Root View Controller----------⬇︎⬇︎
     @IBAction func unwindToRootViewController(segue: UIStoryboardSegue) {
-        print("Unwind to Root View Controller")
+        if segue.identifier == "addWorkoutBackTo" {
+            workoutDay.removeAll()
+            getWorkoutDateList()
+            workoutCalendarView.reloadData()
+        }
     }
     
     @IBAction func backToToday() {
@@ -202,7 +235,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
         handleCellIsToday(cell: cell, date: date)
-
+        handleCellIsWorkoutDay(cell: cell, date: date)
         
         return cell
     }
@@ -212,6 +245,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
         handleCellIsToday(cell: cell, date: date)
+        handleCellIsWorkoutDay(cell: cell, date: date)
         
         if cellState.dateBelongsTo != .thisMonth {
             workoutCalendarView.scrollToDate(date)
@@ -227,6 +261,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         handleCellSelected(cell: cell, cellState: cellState)
         handleCellTextColor(cell: cell, cellState: cellState)
         handleCellIsToday(cell: cell, date: date)
+        handleCellIsWorkoutDay(cell: cell, date: date)
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {

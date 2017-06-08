@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 enum Category: Int {
     case Core = 0
@@ -156,6 +157,7 @@ class AddWorkoutViewController: UIViewController {
             workoutSet = WorkoutSet()
             workoutSets.removeAll()
             workoutTableView.reloadData()
+            selectedIndexRow = 0
         }
         switch type {
         case 1:
@@ -189,12 +191,7 @@ class AddWorkoutViewController: UIViewController {
     }
     
     @IBAction func addWorkoutSet() {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        formatter.timeZone = Calendar.current.timeZone
-        formatter.locale = Calendar.current.locale
-        print("")
-        print("date:\t\t\(formatter.string(from: selectedDay))")
+
         print("category:\t\(category)")
         print("item:\t\t\(item)")
         print("setStatus:\t\(setStatus)")
@@ -217,7 +214,35 @@ class AddWorkoutViewController: UIViewController {
     }
     
     @IBAction func addWorkoutSets() {
-        workoutSet.showAll()
+        if workoutSets.isEmpty {
+            return
+        }
+        
+        for w in workoutSets {
+            writeWorkoutSet(workoutSet: w)
+        }
+        self.performSegue(withIdentifier: "addWorkoutBackTo", sender: self)
+    }
+    
+    func writeWorkoutSet(workoutSet w: WorkoutSet) {
+        let realm = try! Realm()
+        let dbWorkoutSet = RLM_WorkoutSet()
+        
+        dbWorkoutSet.date = selectedDay! as NSDate
+        dbWorkoutSet.category = category.rawValue
+        dbWorkoutSet.item = item
+        dbWorkoutSet.setStatus = setStatus
+        dbWorkoutSet.sets = w.sets
+        dbWorkoutSet.reps = w.reps
+        dbWorkoutSet.mins = w.mins
+        dbWorkoutSet.secs = w.secs
+        dbWorkoutSet.kg = w.kg
+        dbWorkoutSet.km = w.km
+        
+        try! realm.write {
+            realm.add(dbWorkoutSet)
+            //print("DB write success")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
