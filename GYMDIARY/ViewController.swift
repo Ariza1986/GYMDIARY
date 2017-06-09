@@ -10,7 +10,28 @@ import UIKit
 import RealmSwift
 import JTAppleCalendar
 
-var workoutDay:[Date] = []
+struct DiaryWorkout {
+    var category:Category
+    var item:String
+    var setStatus:Int
+    var workoutSets:[WorkoutSet]
+    
+    init() {
+        category = .Core
+        item = ""
+        setStatus = 1
+        workoutSets = []
+    }
+    
+    func showAll() {
+        print("category:\(category)")
+        print("item:\(item)")
+        print("setStatus:\(setStatus)")
+        for w in workoutSets {
+            w.showAll()
+        }
+    }
+}
 
 class ViewController: UIViewController{
     
@@ -19,12 +40,14 @@ class ViewController: UIViewController{
     @IBOutlet weak var month: UILabel!
     @IBOutlet weak var year: UILabel!
     
-    var selectedDay = Date()
-    
     var info = TrainerInfo()
     var myUserDefaults = UserDefaults()
     
     let formatter = DateFormatter()
+    
+    var selectedDay = Date()
+    var workoutDay:[Date] = []
+    var diaryWorkouts:[DiaryWorkout] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +76,9 @@ class ViewController: UIViewController{
                 self.performSegue(withIdentifier: "goToWeightRecord", sender: self)
             }
         }
+        
+        //⬇︎⬇︎---------WorkoutTable------------⬇︎⬇︎
+        workoutTable.allowsSelection = false
         
         //⬇︎⬇︎--------WorkoutCalendar----------⬇︎⬇︎
         workoutCalendarView.minimumLineSpacing = 0
@@ -171,6 +197,7 @@ class ViewController: UIViewController{
             workoutDay.removeAll()
             getWorkoutDateList()
             workoutCalendarView.reloadData()
+            workoutCalendarView.selectDates(from: selectedDay, to: selectedDay, triggerSelectionDelegate: true, keepSelectionIfMultiSelectionAllowed: false)
         }
     }
     
@@ -253,6 +280,7 @@ extension ViewController: JTAppleCalendarViewDelegate {
         
         // reload workoutTable
         selectedDay = date
+        getWorkoutSetsList(selectDay: selectedDay)
         workoutTable.reloadData()
     }
     
@@ -268,22 +296,111 @@ extension ViewController: JTAppleCalendarViewDelegate {
         
         setupCalendarTitle(visibleDates: visibleDates)
     }
+    
+    func getWorkoutSetsList(selectDay: Date) {
+        if !diaryWorkouts.isEmpty {
+            diaryWorkouts.removeAll()
+        }
+        
+        let realm = try! Realm()
+        let workoutSets = realm.objects(RLM_WorkoutSet.self).filter("date = %@", selectedDay)
+        if workoutSets.count > 0 {
+            for ws in workoutSets {
+                if diaryWorkouts.count != 0 {
+                    var flag = true
+                    if ws.item != "Running" && ws.item != "Swimming" {
+                        for (i, dw) in diaryWorkouts.enumerated() {
+                            if dw.item == ws.item {
+                                flag = false
+                                var dws = WorkoutSet()
+                                dws.sets = ws.sets
+                                dws.reps = ws.reps
+                                dws.mins = ws.mins
+                                dws.secs = ws.secs
+                                dws.kg = ws.kg
+                                dws.km = ws.km
+                                diaryWorkouts[i].workoutSets.append(dws)
+                                break
+                            }
+                        }
+                    }
+
+                    if flag { //flag = true no contain
+                        var dw = DiaryWorkout()
+                        dw.category = Category(rawValue: ws.category)!
+                        dw.item = ws.item
+                        dw.setStatus = ws.setStatus
+                        var dws = WorkoutSet()
+                        dws.sets = ws.sets
+                        dws.reps = ws.reps
+                        dws.mins = ws.mins
+                        dws.secs = ws.secs
+                        dws.kg = ws.kg
+                        dws.km = ws.km
+                        dw.workoutSets.append(dws)
+                        diaryWorkouts.append(dw)
+                    }
+                }
+                else {
+                    var dw = DiaryWorkout()
+                    dw.category = Category(rawValue: ws.category)!
+                    dw.item = ws.item
+                    dw.setStatus = ws.setStatus
+                    var dws = WorkoutSet()
+                    dws.sets = ws.sets
+                    dws.reps = ws.reps
+                    dws.mins = ws.mins
+                    dws.secs = ws.secs
+                    dws.kg = ws.kg
+                    dws.km = ws.km
+                    dw.workoutSets.append(dws)
+                    diaryWorkouts.append(dw)
+                }
+            }
+        }
+    }
 }
 
 //⬇︎⬇︎--------WorkoutTableView----------⬇︎⬇︎
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return diaryWorkouts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "workoutCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WorkoutTableViewCell
+        let diaryWorkout = diaryWorkouts[indexPath.row]
         
-        formatter.dateFormat = "YYYY-MM-dd"
+        cell.categoryLabel.text = "\(diaryWorkout.category):"
+        cell.itemTextView.text = "\(diaryWorkout.item)"
+        cell.itemTextView.isScrollEnabled = false
+        cell.setTableView.allowsSelection = false
         
-        cell.textLabel?.text = formatter.string(from: selectedDay)
+        switch diaryWorkout.setStatus {
+        case 2:
+            cell.kmLabel.isHidden = false
+            cell.timeLabel.isHidden = false
+            cell.rateLabel.isHidden = false
+            cell.setTableView.isHidden = true
+            cell.kmLabel.text = "\(diaryWorkout.workoutSets[0].km)Km"
+            cell.timeLabel.text = timeFormatter(mins: diaryWorkout.workoutSets[0].mins,
+                                                secs: diaryWorkout.workoutSets[0].secs)
+            cell.rateLabel.text = timeRate(km: diaryWorkout.workoutSets[0].km,
+                                           mins: diaryWorkout.workoutSets[0].mins,
+                                           secs: diaryWorkout.workoutSets[0].secs)
+        default://1,3
+            cell.kmLabel.isHidden = true
+            cell.timeLabel.isHidden = true
+            cell.rateLabel.isHidden = true
+            cell.setTableView.isHidden = false
+            cell.workoutSets.removeAll()
+            cell.workoutSets = diaryWorkout.workoutSets
+            cell.setStatus = diaryWorkout.setStatus
+            cell.setTableView.reloadData()
+            break
+        }
         
         return cell
     }

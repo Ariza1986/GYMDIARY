@@ -139,7 +139,7 @@ class AddWorkoutViewController: UIViewController {
         formatter.locale = Calendar.current.locale
         workoutDatePicker.date = selectedDay
         workoutDatePicker.locale = Locale(identifier: "zh_TW")
-        print(formatter.string(from: selectedDay))
+        //print(formatter.string(from: selectedDay))
         workoutDatePicker.addTarget(self, action: #selector(self.datePickerChanged),for: .valueChanged)
     }
     
@@ -192,9 +192,9 @@ class AddWorkoutViewController: UIViewController {
     
     @IBAction func addWorkoutSet() {
 
-        print("category:\t\(category)")
-        print("item:\t\t\(item)")
-        print("setStatus:\t\(setStatus)")
+        //print("category:\t\(category)")
+        //print("item:\t\t\(item)")
+        //print("setStatus:\t\(setStatus)")
         
         for textField in textFieldList {
             if (textField.text?.isEmpty)! {
@@ -601,11 +601,16 @@ extension AddWorkoutViewController: UITableViewDataSource, UITableViewDelegate {
                                     String(workoutSets[indexPath.row].reps) + " reps " +
                                     String(workoutSets[indexPath.row].kg) + "kg"
         case 2:  //km mins secs
-            cell.textLabel?.text = String(workoutSets[indexPath.row].km) + " Km\t\t" + "T: " +
-                                    timeFormatter(mins: workoutSets[indexPath.row].mins, secs: workoutSets[indexPath.row].secs)
+            cell.textLabel?.text = String(workoutSets[indexPath.row].km) + "Km  " + "T:" +
+                                    timeFormatter(mins: workoutSets[indexPath.row].mins,
+                                                  secs: workoutSets[indexPath.row].secs) + "  " +
+                                    timeRate(km: workoutSets[indexPath.row].km,
+                                             mins: workoutSets[indexPath.row].mins,
+                                             secs: workoutSets[indexPath.row].secs)
         case 3:  //sets mins secs
             cell.textLabel?.text = String(workoutSets[indexPath.row].sets)  + " sets\t\t" + "T: " +
-                                    timeFormatter(mins: workoutSets[indexPath.row].mins, secs: workoutSets[indexPath.row].secs)
+                                    timeFormatter(mins: workoutSets[indexPath.row].mins,
+                                                  secs: workoutSets[indexPath.row].secs)
         default:
             print("Error:cellforrow")
             break
@@ -661,7 +666,7 @@ extension AddWorkoutViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension UIViewController {
-    func timeFormatter (mins: Int, secs: Int) -> String {
+    func timeFormatter(mins: Int, secs: Int) -> String {
         var minsStr:String = ""
         var secsStr:String = ""
         switch mins {
@@ -680,5 +685,18 @@ extension UIViewController {
             secsStr = "\(secs)"
         }
         return minsStr + secsStr
+    }
+    
+    func timeRate(km: Double, mins: Int, secs: Int) -> String {
+        let totalSecs = mins * 60 + secs
+        let averageSecs = Int(Double(totalSecs) / km)
+        
+        if averageSecs/60 == 0 {
+            return "00'" + "\((averageSecs) < 10 ? "0\(averageSecs)" : "\(averageSecs)")\"km"
+        }
+        else {
+            return "\((averageSecs / 60) < 10 ? "0\(averageSecs / 60)" : "\(averageSecs / 60)")'" +
+                    "\((averageSecs % 60) < 10 ? "0\(averageSecs % 60)" : "\(averageSecs % 60)")\"/km"
+        }
     }
 }
